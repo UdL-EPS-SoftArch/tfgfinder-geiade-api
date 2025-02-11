@@ -1,0 +1,9 @@
+allowed-origins: "https://tfgfinder-geiade.fly.dev,https://deploy-preview-*--tfgfinder-geiade.fly.dev"
+
+logging:
+    level:
+        org:
+            hibernate: error
+            springframework.core: error
+            springframework.web: error
+        root: error
