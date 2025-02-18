@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
@@ -27,7 +28,7 @@ public class User extends UriEntity<String> implements UserDetails {
 	public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Id
-	private String id;
+	private String id;    //username?
 
 	@NotBlank
 	@Email
@@ -41,6 +42,9 @@ public class User extends UriEntity<String> implements UserDetails {
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private boolean passwordReset;
+
+	@ElementCollection
+	private Collection<String> favorites;
 
 	public void encodePassword() {
 		this.password = passwordEncoder.encode(this.password);
