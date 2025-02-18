@@ -19,6 +19,9 @@ public class Professor extends Director {
     @NotEmpty
     private String faculty;
 
+    @NotEmpty
+    private  String department;
+
     @Override
     @ElementCollection
     public Collection<GrantedAuthority> getAuthorities() {

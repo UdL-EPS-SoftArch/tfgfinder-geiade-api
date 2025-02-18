@@ -16,7 +16,7 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 public class Director extends User{
     @NotEmpty
-    private String department;
+    private Boolean available;
 
     @Override
     @ElementCollection
