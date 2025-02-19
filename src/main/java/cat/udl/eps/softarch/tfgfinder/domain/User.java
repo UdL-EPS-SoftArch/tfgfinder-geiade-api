@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
@@ -43,8 +44,7 @@ public class User extends UriEntity<String> implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private boolean passwordReset;
 
-	@ElementCollection
-	private Collection<String> favorites;
+	//Faltarà crear favourites per la llista de propostes favorites
 
 	public void encodePassword() {
 		this.password = passwordEncoder.encode(this.password);
