@@ -3,7 +3,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,9 +14,10 @@ import java.util.Collection;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Director extends User{
-    @NotEmpty
-    private Boolean available;
+public class Director extends User {
+
+    @NotNull(message = "La disponibilidad no puede ser nula")
+    private Boolean available = true;
 
     @Override
     @ElementCollection

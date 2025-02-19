@@ -3,7 +3,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,10 +17,20 @@ import java.util.Collection;
 public class Professor extends Director {
 
     @NotEmpty
+    @Size(min = 2, max = 100, message = "La facultad debe tener entre 2 y 100 caracteres")
     private String faculty;
 
     @NotEmpty
-    private  String department;
+    @Size(min = 2, max = 100, message = "El departamento debe tener entre 2 y 100 caracteres")
+    private String department;
+
+    @NotEmpty
+    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
+    private String name;
+
+    @NotEmpty
+    @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres")
+    private String surname;
 
     @Override
     @ElementCollection
