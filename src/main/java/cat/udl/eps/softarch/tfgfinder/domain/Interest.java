@@ -40,19 +40,4 @@ public class Interest extends UriEntity<String> {
 
 	@Enumerated (EnumType.STRING)
 	private Status status;
-
-	
-	public String getInvite() { return id; }
-
-	public void setInvite(String invite) { this.id = invite; }
-
-
-	public ZonedDateTime getWhen() { return when; }
-
-	public void setWhen(ZonedDateTime when) { this.when = when; }
-
-
-	public Status getStatus() { return status; }
-
-	public void setStatus(Status status) { this.status = status; }
 }
