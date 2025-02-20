@@ -21,7 +21,7 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 
 @Entity
-@Table(name = "Interest") 
+@Table(name = "interest") 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Interest extends UriEntity<String> {
