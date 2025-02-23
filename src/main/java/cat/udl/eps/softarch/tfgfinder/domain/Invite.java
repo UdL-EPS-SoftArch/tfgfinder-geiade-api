@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 public class Invite extends UriEntity<Long>  {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
