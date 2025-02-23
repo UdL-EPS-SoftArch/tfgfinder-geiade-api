@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 public class Category extends UriEntity<Long> {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 

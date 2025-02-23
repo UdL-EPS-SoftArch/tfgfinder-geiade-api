@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 public class Proposal extends UriEntity<Long> {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
