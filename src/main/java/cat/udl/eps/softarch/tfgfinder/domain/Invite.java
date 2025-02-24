@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 public class Invite extends UriEntity<Long>  {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -25,9 +26,12 @@ public class Invite extends UriEntity<Long>  {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // WHO: Qui està associat a la invitació
     @NotNull
     @JsonIdentityReference(alwaysAsId = true)
     private User who;
 
+    @ManyToOne
+    @NotNull
+    @JsonIdentityReference(alwaysAsId = true)
+    private Proposal what;
 }
