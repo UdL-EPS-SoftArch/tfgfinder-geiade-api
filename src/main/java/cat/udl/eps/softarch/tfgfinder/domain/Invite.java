@@ -26,9 +26,13 @@ public class Invite extends UriEntity<Long>  {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // WHO: Qui està associat a la invitació
     @NotNull
     @JsonIdentityReference(alwaysAsId = true)
     private User who;
+
+    @ManyToOne
+    @NotNull
+    @JsonIdentityReference(alwaysAsId = true)
+    private Proposal what;
 
 }
