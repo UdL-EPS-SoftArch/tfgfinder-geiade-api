@@ -10,12 +10,13 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 
 @Entity
-@Table(name = "Agrees")
+@Table(name = "agrees")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Agree extends UriEntity<String> {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @DateTimeFormat
@@ -29,17 +30,5 @@ public class Agree extends UriEntity<String> {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    public String getId() { return id; }
-
-    public void setAgree(String invite) { this.id = invite; }
-
-    public ZonedDateTime getWhen() { return when; }
-
-    public void setWhen(ZonedDateTime when) { this.when = when; }
-
-    public Status getStatus() { return status; }
-
-    public void setStatus(Status status) { this.status = status; }
 
 }
