@@ -17,7 +17,7 @@ public class Agree extends UriEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @DateTimeFormat
     private ZonedDateTime when;
