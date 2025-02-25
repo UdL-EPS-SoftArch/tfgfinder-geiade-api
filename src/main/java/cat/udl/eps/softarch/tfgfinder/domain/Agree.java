@@ -13,11 +13,11 @@ import java.util.Collection;
 @Table(name = "agrees")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Agree extends UriEntity<String> {
+public class Agree extends UriEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @DateTimeFormat
     private ZonedDateTime when;
