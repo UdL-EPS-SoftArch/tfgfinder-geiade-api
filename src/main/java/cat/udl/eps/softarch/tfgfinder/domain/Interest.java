@@ -1,7 +1,9 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,4 +31,9 @@ public class Interest extends UriEntity<Long> {
 
 	@Enumerated (EnumType.STRING)
 	private Status status;
+
+	@ManyToOne
+	@NotNull
+	@JsonIdentityReference(alwaysAsId = true)
+	private Proposal proposal;
 }
