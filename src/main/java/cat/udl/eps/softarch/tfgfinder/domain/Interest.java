@@ -29,4 +29,11 @@ public class Interest extends UriEntity<Long> {
 
 	@Enumerated (EnumType.STRING)
 	private Status status;
+
+	
+	// Relations
+
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private User user;
 }
