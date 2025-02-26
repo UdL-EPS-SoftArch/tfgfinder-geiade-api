@@ -1,29 +1,30 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
+import java.time.ZonedDateTime;
 
 @Entity
-@EqualsAndHashCode(callSuper=true)
 @Data
+@EqualsAndHashCode(callSuper=true)
 
-public class Category extends UriEntity<Long> {
+public class Message extends UriEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    private ZonedDateTime when;
 
     @NotBlank
-    private String name;
+    private String text;
 
-    @NotBlank
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String description;
+    @ManyToOne
+    private User from;
 
 }
