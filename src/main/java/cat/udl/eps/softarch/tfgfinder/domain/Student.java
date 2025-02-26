@@ -1,4 +1,5 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.ElementCollection;
@@ -17,40 +18,40 @@ import java.util.Collection;
 public class Student extends User {
 
     @NotEmpty
-    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
+    @Size(min = 2, max = 50, message = "The name must be between 2 and 50 characters long")
     private String name;
 
     @NotEmpty
-    @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres")
+    @Size(min = 2, max = 50, message = "The surname must be between 2 and 50 characters long")
     private String surname;
 
     @NotEmpty
-    @Pattern(regexp = "^[0-9]{8}[A-Za-z]$", message = "El DNI debe tener 8 números seguidos de una letra")
+    @Pattern(regexp = "^[0-9]{8}[A-Za-z]$", message = "The DNI must have 8 digits followed by a letter")
     private String DNI;
 
     @NotEmpty
-    @Size(min = 5, max = 100, message = "La dirección debe tener entre 5 y 100 caracteres")
+    @Size(min = 5, max = 100, message = "The address must be between 5 and 100 characters long")
     private String address;
 
     @NotEmpty
-    @Size(min = 2, max = 50, message = "El municipio debe tener entre 2 y 50 caracteres")
+    @Size(min = 2, max = 50, message = "The municipality must be between 2 and 50 characters long")
     private String municipality;
 
     @NotEmpty
-    @Pattern(regexp = "^[0-9]{5}$", message = "El código postal debe contener exactamente 5 dígitos")
+    @Pattern(regexp = "^[0-9]{5}$", message = "The postal code must contain exactly 5 digits")
     private String postalCode;
 
     @NotEmpty
-    @Pattern(regexp = "^[0-9]{9}$", message = "El número de teléfono debe contener exactamente 9 dígitos")
+    @Pattern(regexp = "^[0-9]{9}$", message = "The phone number must contain exactly 9 digits")
     private String phoneNumber;
 
     @NotEmpty
-    @Size(min = 2, max = 100, message = "El nombre del grado debe tener entre 2 y 100 caracteres")
+    @Size(min = 2, max = 100, message = "The degree name must be between 2 and 100 characters long")
     private String degree;
 
     @Override
     @ElementCollection
-    public Collection<GrantedAuthority> getAuthorities(){
+    public Collection<GrantedAuthority> getAuthorities() {
         return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_STUDENT");
     }
 }

@@ -1,4 +1,5 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.ElementCollection;
@@ -16,7 +17,7 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 public class Director extends User {
 
-    @NotNull(message = "La disponibilidad no puede ser nula")
+    @NotNull(message = "Availability cannot be null")
     private Boolean available = true;
 
     @Override

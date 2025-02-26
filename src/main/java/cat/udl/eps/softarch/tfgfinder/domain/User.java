@@ -44,7 +44,7 @@ public class User extends UriEntity<String> implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private boolean passwordReset;
 
-	//Faltarà crear favourites per la llista de propostes favorites
+	// Favourites for the list of favorite proposals still has to be created.
 
 	public void encodePassword() {
 		this.password = passwordEncoder.encode(this.password);
