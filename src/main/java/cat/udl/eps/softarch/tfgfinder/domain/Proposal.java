@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
 import java.util.Collection;
-import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -48,9 +47,9 @@ public class Proposal extends UriEntity<Long> {
     @ManyToOne
     private User user; // Reference to the User entity
 
-    @ManyToMany
+    @ManyToOne
     @NotBlank
-    private List<Category> categories;
+    private Category category;
 
 
 
