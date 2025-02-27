@@ -17,4 +17,6 @@ public interface MessageRepository extends CrudRepository<Message, Long>, Paging
 
     List<Message> findByFrom(@Param("user") User from);
 
+    List<Message> findByChatId(@Param("chatId") Long chatId);
+
 }
