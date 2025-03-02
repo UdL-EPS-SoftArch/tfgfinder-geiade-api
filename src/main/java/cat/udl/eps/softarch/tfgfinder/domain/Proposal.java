@@ -46,4 +46,7 @@ public class Proposal extends UriEntity<Long> {
     @ManyToOne
     private User user; // Reference to the User entity
 
+    @ManyToOne
+    private Student student;
+
 }
