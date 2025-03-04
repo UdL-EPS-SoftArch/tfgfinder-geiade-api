@@ -13,18 +13,10 @@ import java.util.List;
 @RepositoryRestResource
 public interface MessageRepository extends CrudRepository<Message, Long>, PagingAndSortingRepository<Message, Long> {
 
-    /* Interface provides automatically, as defined in
-     * https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html
-     * and
-     * https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/PagingAndSortingRepository.html
-     * the methods: count, delete, deleteAll, deleteById, existsById, findAll, findAllById, findById, save, saveAll,...
-     *
-     * Additional methods like findByUsernameContaining can be defined following:
-     * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
-     */
-
     List<Message> findByWhen(@Param("when")ZonedDateTime when);
 
     List<Message> findByFrom(@Param("user") User from);
+
+    List<Message> findByChatId(@Param("chatId") Long chatId);
 
 }

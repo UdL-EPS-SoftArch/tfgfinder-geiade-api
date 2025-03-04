@@ -24,6 +24,7 @@ public class Message extends UriEntity<Long> {
     @NotBlank
     private String text;
 
+    @NotNull
     @ManyToOne
     private User from;
 
