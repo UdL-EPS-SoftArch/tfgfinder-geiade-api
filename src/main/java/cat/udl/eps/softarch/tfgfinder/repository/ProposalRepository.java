@@ -10,5 +10,6 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface ProposalRepository extends CrudRepository<Proposal, Long>, PagingAndSortingRepository<Proposal, Long> {
+    List<Proposal> findProposalByCategory(@Param("category") String category);
   
 }
