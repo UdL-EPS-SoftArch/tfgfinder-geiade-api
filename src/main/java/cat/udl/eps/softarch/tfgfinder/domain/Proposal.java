@@ -54,4 +54,6 @@ public class Proposal extends UriEntity<Long> {
 
 
 
+    @ManyToOne
+    private Category category;
 }
