@@ -34,5 +34,5 @@ TFG Finder backend developed by the GEIADE team. A Spring Boot project including
 
 ## Entities Model
 
-![EntityModelsDiagram](https://www.plantuml.com/plantuml/svg/5Sqn3i8m3030dLV00rBlJ6Ne1X9InGDCx3IMKgUo7V5zOBhnPW-q67ixNKHp6yJ3shb677u5CFnCcqGTx-5ikMkmnfJx3Y-wf-MvfhMNk5ck46KheiIMDXOaJdW861U7oaWEEuh2eY4Xx8zEtARZtywizFCB?v0)
+![EntityModelsDiagram](https://www.plantuml.com/plantuml/svg/5Sqn3i8m3030dLV00rBlJ6Ne1X9InGDCx3IMKgUo7V5zOBhnPW-q67ixNKHp6yJ3shb677u5CFnCcqGTx-5ikMkmnfJx3Y-wf-MvfhMNk5ck46KheiIMDXOaJdW861U7oaWEEuh2eY4Xx8zEtARZtywizFCB?v1)
 
