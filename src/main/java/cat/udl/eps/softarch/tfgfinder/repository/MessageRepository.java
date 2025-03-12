@@ -23,7 +23,7 @@ public interface MessageRepository extends CrudRepository<Message, Long>, Paging
      * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
      */
 
-    List<Message> findByWhen(@Param("when")ZonedDateTime when);
+    List<Message> findByMessageDate(@Param("messageDate")ZonedDateTime messageDate);
 
     List<Message> findByFrom(@Param("user") User from);
 
