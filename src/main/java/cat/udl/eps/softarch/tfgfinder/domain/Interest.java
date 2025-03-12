@@ -11,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "interest")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Interest extends UriEntity<Long> {
@@ -21,7 +20,7 @@ public class Interest extends UriEntity<Long> {
 	private Long id;
 
 	@DateTimeFormat
-	private ZonedDateTime when;
+	private ZonedDateTime createdDate;
 
 	public enum Status {
 		PENDING,

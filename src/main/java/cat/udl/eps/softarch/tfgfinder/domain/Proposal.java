@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
 import java.util.Collection;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -51,4 +52,5 @@ public class Proposal extends UriEntity<Long> {
 
     @ManyToOne
     private Category category;
+
 }
