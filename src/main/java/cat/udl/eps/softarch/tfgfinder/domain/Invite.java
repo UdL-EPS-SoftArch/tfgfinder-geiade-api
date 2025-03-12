@@ -20,7 +20,7 @@ public class Invite extends UriEntity<Long>  {
     private Long id;
 
     @NotNull
-    private ZonedDateTime InviteDate;
+    private ZonedDateTime when;
 
     @NotBlank
     private String status;
