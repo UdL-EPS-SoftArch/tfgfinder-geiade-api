@@ -10,9 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 
 @Entity
-@Table(name = "agrees")
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class Agree extends UriEntity<Long> {
 
     @Id
@@ -20,7 +18,7 @@ public class Agree extends UriEntity<Long> {
     private Long id;
 
     @DateTimeFormat
-    private ZonedDateTime when;
+    private ZonedDateTime agreeTime;
 
     public enum Status {
         PENDING,

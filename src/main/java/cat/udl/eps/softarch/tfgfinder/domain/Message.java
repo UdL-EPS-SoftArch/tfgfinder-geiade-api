@@ -19,7 +19,7 @@ public class Message extends UriEntity<Long> {
     private Long id;
 
     @NotNull
-    private ZonedDateTime when;
+    private ZonedDateTime MessageTime;
 
     @NotBlank
     private String text;
