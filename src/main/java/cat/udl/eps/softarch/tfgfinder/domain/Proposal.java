@@ -47,13 +47,7 @@ public class Proposal extends UriEntity<Long> {
     @ManyToOne
     private User user; // Reference to the User entity
 
-    @ManyToOne //Changed to many to one. TODO: Try to do the many to many relation in a future as we saw in class it gave an error
+    @ManyToOne //Changed to many to one.
     @NotBlank
-    private Category category;
-
-
-
-
-    @ManyToOne
     private Category category;
 }
