@@ -20,7 +20,7 @@ public class Agree extends UriEntity<Long> {
     private Long id;
 
     @DateTimeFormat
-    private ZonedDateTime when;
+    private ZonedDateTime agreeDate;
 
     public enum Status {
         PENDING,
