@@ -5,15 +5,14 @@ import cat.udl.eps.softarch.tfgfinder.domain.Proposal;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-
-@Repository
+@RepositoryRestResource
 public interface ProposalRepository extends CrudRepository<Proposal, Long>, PagingAndSortingRepository<Proposal, Long> {
-    // Get all the proposals by category
-    List<Proposal> findByCategory(@Param("Category") Category category);
+    List<Proposal> findProposalByCategory(@Param("category") Category category);
+  
 }
-
 
