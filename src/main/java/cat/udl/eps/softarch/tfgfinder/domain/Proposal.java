@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
 import java.util.Collection;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,7 +17,7 @@ import lombok.EqualsAndHashCode;
 public class Proposal extends UriEntity<Long> {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -46,12 +47,10 @@ public class Proposal extends UriEntity<Long> {
     @ManyToOne
     private User user; // Reference to the User entity
 
-    // Mandatory once accepted: at least one professor
     @ManyToOne
-    private Professor professor;
+    private Student student;
 
-    // Optional Co-Director (Director/External/Professor)
     @ManyToOne
-    private Director coDirector;
+    private Category category;
 
 }
