@@ -1,8 +1,6 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
 import java.util.Collection;
-import java.util.List;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
