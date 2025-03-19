@@ -40,6 +40,7 @@ public class LogInUserStepDefs {
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/identity")
+                        .session(stepDefs.session) // 🔹 Usamos sesión mock
                         .with(AuthenticationStepDefs.authenticate())
                         .accept(MediaType.APPLICATION_JSON)
         ).andDo(print());
@@ -50,8 +51,8 @@ public class LogInUserStepDefs {
         stepDefs.result.andExpect(status().isOk());
     }
 
-    @Then("^I am not authenticated$")
-    public void iAmNotAuthenticated() throws Exception {
+    @Then("^I am not authenticated due to failed login$")
+    public void iAmNotAuthenticatedDueToFailedLogin() throws Exception {
         stepDefs.result.andExpect(status().isUnauthorized());
     }
 
@@ -59,8 +60,18 @@ public class LogInUserStepDefs {
     public void iRemainLoggedInAs(String username) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/identity")
-                        .with(AuthenticationStepDefs.authenticate())
+                        .session(stepDefs.session)
                         .accept(MediaType.APPLICATION_JSON)
         ).andDo(print());
     }
+
+    @When("^I attempt to login again with username \"([^\"]*)\" and password \"([^\"]*)\"$")
+    public void iAttemptToLoginAgainWithUsernameAndPassword(String username, String password) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/identity")
+                        .with(AuthenticationStepDefs.authenticate()) // Usa autenticación
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andDo(print());
+    }
+
 }

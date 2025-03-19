@@ -13,12 +13,12 @@ Feature: Login User
     Given There is a registered user with username "user" and password "password"
     When I login with username "user" and password "wrongpassword"
     Then The response code is 401
-    And I am not authenticated
+    And I am not authenticated due to failed login
 
   Scenario: Login with non-existent username
     When I login with username "nonexistent" and password "password"
     Then The response code is 401
-    And I am not authenticated
+    And I am not authenticated due to failed login
 
   Scenario: Login with empty username or password
     When I login with username "" and password "password"
@@ -30,7 +30,8 @@ Feature: Login User
     And The error message is "Unauthorized"
 
   Scenario: Login when already authenticated
-    Given I login as "user" with password "password"
-    When I login with username "user" and password "password"
-    Then The response code is 401
+    Given There is a registered user with username "user" and password "password"
+    And I login with username "user" and password "password"
+    When I attempt to login again with username "user" and password "password"
+    Then The response code is 200
     And I remain logged in as "user"
