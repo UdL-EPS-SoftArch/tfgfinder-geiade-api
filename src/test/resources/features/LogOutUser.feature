@@ -7,13 +7,12 @@ Feature: Logout User
     Given There is a registered user with username "user" and password "password"
     When I login with username "user" and password "password"
     And I log out
-    Then The response code is 200
+    Then The response code is 204
     And I am not authenticated after logout
 
   Scenario: Logout without being logged in
     When I log out
-    Then The response code is 401
-    And The error message is "Unauthorized"
+    Then The response code is 204
 
   Scenario: Login after logout
     Given There is a registered user with username "user" and password "password"

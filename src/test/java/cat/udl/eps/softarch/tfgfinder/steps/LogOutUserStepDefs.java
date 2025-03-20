@@ -27,10 +27,6 @@ public class LogOutUserStepDefs {
         ).andDo(print());
     }
 
-    @Then("^The response code is (\\d+)$")
-    public void theResponseCodeIs(int expectedStatus) throws Exception {
-        stepDefs.result.andExpect(status().is(expectedStatus));
-    }
 
     @Then("^I am not authenticated after logout$")
     public void iAmNotAuthenticatedAfterLogout() throws Exception {

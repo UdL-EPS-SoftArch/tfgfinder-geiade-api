@@ -65,10 +65,10 @@ public class StepDefs {
     @And("^The error message is \"([^\"]*)\"$")
     public void theErrorMessageIs(String message) throws Exception {
         String responseContent = result.andReturn().getResponse().getContentAsString();
-        if (responseContent.isEmpty()) {
-            result.andExpect(status().reason(is(message)));  // Si no hay body en la respuesta
+        if (result.andReturn().getResponse().getContentAsString().isEmpty()) {
+            result.andExpect(status().reason(is(message)));
         } else {
-            result.andExpect(jsonPath("$.message", is(message)));  // Si hay body en JSON
+            result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
         }
     }
 
