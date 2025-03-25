@@ -24,7 +24,7 @@ Feature: Create Interest
         And There is 0 Interest created with user "user" and proposal id 1
 
     
-    Scenario: Create an interest that already has been created
+    Scenario: Create an interest that already exists
         Given Exists an interest with user "user" and proposal id 1
         When I create an interest with user "user" and proposal id 1
         Then The response code is 401
