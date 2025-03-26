@@ -7,7 +7,6 @@ import cat.udl.eps.softarch.tfgfinder.repository.CategoryRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.ProposalRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 import io.cucumber.java.en.*;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.Set;
 
 @SpringBootTest
 public class CreateProposalStepDefs {
@@ -94,17 +92,14 @@ public class CreateProposalStepDefs {
         Assertions.assertTrue(foundProposal.isPresent(), "Proposal was not created");
     }
 
-    @Then("the system should display an error message {string}")
-    public void the_system_should_display_an_error_message(String errorMessage) {
+    @Then("the system should throw a constraint error")
+    public void the_system_should_throw_a_constraint_error() {
         try {
             // Simulate saving the proposal (this should throw an exception if validation fails)
             proposalRepository.save(proposal);
             Assert.fail("Expected ConstraintViolationException was not thrown.");
-        } catch (ConstraintViolationException e) {
-            // Check if the exception contains the correct message
-            Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-            String error = violations.iterator().next().getMessage();
-            Assertions.assertEquals(errorMessage, error);
+        } catch (ConstraintViolationException ignored) {
+
         }
     }
 

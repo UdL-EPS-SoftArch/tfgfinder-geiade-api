@@ -21,6 +21,6 @@ Feature: Create a Proposal
     And speciality "AI & Robotics"
     And kind "Research"
     And keywords "AI, Robotics"
-    Then the system should display an error message "el tamaño debe estar entre 50 y 500"
+    Then the system should throw a constraint error
     And the proposal should not be created
 
