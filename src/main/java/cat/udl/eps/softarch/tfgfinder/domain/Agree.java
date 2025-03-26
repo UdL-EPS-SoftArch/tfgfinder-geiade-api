@@ -21,9 +21,9 @@ public class Agree extends UriEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DateTimeFormat
     @NotNull
-    private ZonedDateTime when;
+    @DateTimeFormat
+    private ZonedDateTime agreeDate;
 
     public enum Status {
         PENDING,
