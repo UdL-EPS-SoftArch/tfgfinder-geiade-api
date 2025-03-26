@@ -4,7 +4,7 @@ Feature: Invite as Student
   I want to invite them to join my proposal
 
   Scenario: Successfully invite a professor
-    Given I am logged in as a student with name "student1"
+    Given I login as "student1" with password "password"
     #And There is a registered professor with name "professor1"
     #When I send an invite to "professor1" for the proposal "ProposalX"
     #Then The response code is 201
