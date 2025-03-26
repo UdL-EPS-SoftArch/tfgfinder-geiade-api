@@ -23,7 +23,7 @@ public class Category extends UriEntity<Long> {
     private String name;
 
     @NotBlank
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String description;
 
 }
