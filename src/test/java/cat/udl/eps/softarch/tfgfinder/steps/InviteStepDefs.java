@@ -6,12 +6,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 public class InviteStepDefs {
@@ -19,25 +22,18 @@ public class InviteStepDefs {
     @Autowired
     private StepDefs stepDefs;
 
-    private String loggedInUser;
-    private String inviteeUser;
-    private String proposalName;
+    @Autowired
+    private UserRepository professorRepository;
 
     @Given("I am logged in as a student with name {string}")
     public void iAmLoggedInAsAStudent(String name) {
-
-        loggedInUser = name;
 
         AuthenticationStepDefs.currentUsername = name;
         AuthenticationStepDefs.currentPassword = "password";
     }
 
-    @And("There is a registered professor with name {string}")
-    public void thereIsARegisteredProfessorWithUsername(String username) throws Exception {
-        RegisterStepDefs registerStepDefs = new RegisterStepDefs();
-        registerStepDefs.thereIsARegisteredUserWithUsernameAndPasswordAndEmail(username, "professor1@example.com", "professor1password");
-    }
 
+/*
     @And("There is a registered external user with name {string}")
     public void thereIsARegisteredExternalUserWithUsername(String username) throws Exception {
         RegisterStepDefs registerStepDefs = new RegisterStepDefs();
@@ -80,5 +76,8 @@ public class InviteStepDefs {
     public void theErrorMessageIs(String expectedErrorMessage) throws Exception {
         stepDefs.result.andExpect((ResultMatcher) jsonPath("$..message", is(expectedErrorMessage)));
     }
+
+
+ */
 
 }

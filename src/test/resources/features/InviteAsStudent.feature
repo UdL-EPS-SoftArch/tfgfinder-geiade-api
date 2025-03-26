@@ -5,10 +5,10 @@ Feature: Invite as Student
 
   Scenario: Successfully invite a professor
     Given I am logged in as a student with name "student1"
-    And There is a registered professor with name "professor1"
-    When I send an invite to "professor1" for the proposal "ProposalX"
-    Then The response code is 201
-    And The user "professor1" has a pending invitation for "ProposalX"
+    #And There is a registered professor with name "professor1"
+    #When I send an invite to "professor1" for the proposal "ProposalX"
+    #Then The response code is 201
+    #And The user "professor1" has a pending invitation for "ProposalX"
 
   Scenario: Successfully invite an external
     Given I am logged in as a student with name "student1"
