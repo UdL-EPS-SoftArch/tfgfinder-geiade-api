@@ -1,7 +1,9 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,6 +22,7 @@ public class Agree extends UriEntity<Long> {
     private Long id;
 
     @DateTimeFormat
+    @NotNull
     private ZonedDateTime when;
 
     public enum Status {
@@ -29,6 +32,17 @@ public class Agree extends UriEntity<Long> {
     }
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Status status;
+
+    @ManyToOne
+    @NotNull
+    @JsonIdentityReference(alwaysAsId = true)
+    private Proposal proposal;
+
+    @ManyToOne
+    @NotNull
+    @JsonIdentityReference(alwaysAsId = true)
+    private User user;
 
 }
