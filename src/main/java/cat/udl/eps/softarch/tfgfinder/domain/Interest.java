@@ -31,6 +31,11 @@ public class Interest extends UriEntity<Long> {
 	@Enumerated (EnumType.STRING)
 	private Status status;
 
+	// Relations
+
+	@ManyToOne
+	private User user;
+
 	@ManyToOne
 	@NotNull
 	@JsonIdentityReference(alwaysAsId = true)
