@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface CategoryRepository extends CrudRepository<Category, Long>, PagingAndSortingRepository<Category, Long> {
 
     Optional<Category> findByName(@Param("name") String name); //Find by the exact name
-    List<Category> findByNameContainingIgnoreCase(@Param("name") String name); //Find by partial name matching
+    List<Category> findByNameContainingIgnoreCase(@Param("name") String name); //Find by partial name matching to find it when not written correctly
 
 
 }
