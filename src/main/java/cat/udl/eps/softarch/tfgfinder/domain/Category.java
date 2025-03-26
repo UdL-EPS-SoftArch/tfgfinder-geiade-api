@@ -3,6 +3,7 @@ package cat.udl.eps.softarch.tfgfinder.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,7 +24,8 @@ public class Category extends UriEntity<Long> {
     private String name;
 
     @NotBlank
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Size(min = 50, max = 500)
     private String description;
 
 }
