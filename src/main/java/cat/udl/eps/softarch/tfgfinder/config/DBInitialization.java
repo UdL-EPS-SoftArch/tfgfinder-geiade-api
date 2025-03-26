@@ -1,10 +1,12 @@
 package cat.udl.eps.softarch.tfgfinder.config;
 import cat.udl.eps.softarch.tfgfinder.domain.User;
 import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
+
 
 @Configuration
 public class DBInitialization {
@@ -13,9 +15,12 @@ public class DBInitialization {
     @Value("${spring.profiles.active:}")
     private String activeProfiles;
     private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
 
-    public DBInitialization(UserRepository userRepository) {
+
+    public DBInitialization(UserRepository userRepository, StudentRepository studentRepository) {
         this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
     }
 
     @PostConstruct
@@ -42,13 +47,13 @@ public class DBInitialization {
         }
         if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
             // Testing instances
-            if (!userRepository.existsById("student1")) {
+            if (!studentRepository.existsById("student1")) {
                 User student1 = new User();
                 student1.setEmail("student1@sample.app");
                 student1.setId("student1");
                 student1.setPassword(defaultPassword);
                 student1.encodePassword();
-                userRepository.save(student1);
+                studentRepository.save(student1);
             }
         }
         if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
