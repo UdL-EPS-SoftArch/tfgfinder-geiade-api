@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,6 @@ public class Proposal extends UriEntity<Long> {
     private User user; // Reference to the User entity
 
     @ManyToOne //Changed to many to one.
-    @NotBlank
+    @NotNull
     private Category category;
 }
