@@ -34,17 +34,6 @@ public class RegisterStepDefs {
                     userRepository.existsById(user));
   }
 
-  @Given("^There is a registered user with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
-  public void thereIsARegisteredUserWithUsernameAndPasswordAndEmail(String username, String password, String email) {
-    if (!userRepository.existsById(username)) {
-      User user = new User();
-      user.setEmail(email);
-      user.setId(username);
-      user.setPassword(password);
-      user.encodePassword();
-      userRepository.save(user);
-    }
-  }
 
   @And("^I can login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
   public void iCanLoginWithUsernameAndPassword(String username, String password) throws Throwable {
