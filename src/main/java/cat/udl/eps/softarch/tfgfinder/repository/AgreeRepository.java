@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public interface AgreeRepository extends CrudRepository<Agree, Long>, PagingAndSortingRepository<Agree, Long> {
-    List<Agree> findAgreeByWhen(@Param("when") ZonedDateTime when);
+    List<Agree> findAgreeByAgreeDate(@Param("agreeDate") ZonedDateTime agreeDate);
     List<Agree> findAgreeByStatus(Agree.@NotNull Status status);
     List<Agree> findAgreesByProposal(@Param("proposal") Proposal proposal);
     List<Agree> findAgreeByUser(@Param("user") User user);
