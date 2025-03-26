@@ -1,5 +1,7 @@
 package cat.udl.eps.softarch.tfgfinder.config;
 import cat.udl.eps.softarch.tfgfinder.domain.User;
+import cat.udl.eps.softarch.tfgfinder.repository.ExternalRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.ProfessorRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +18,15 @@ public class DBInitialization {
     private String activeProfiles;
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
+    private final ProfessorRepository professorRepository;
+    private final ExternalRepository externalRepository;
 
 
-    public DBInitialization(UserRepository userRepository, StudentRepository studentRepository) {
+    public DBInitialization(UserRepository userRepository, StudentRepository studentRepository, ProfessorRepository professorRepository, ExternalRepository externalRepository) {
         this.userRepository = userRepository;
         this.studentRepository = studentRepository;
+        this.professorRepository = professorRepository;
+        this.externalRepository = externalRepository;
     }
 
     @PostConstruct
@@ -58,35 +64,35 @@ public class DBInitialization {
         }
         if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
             // Testing instances
-            if (!userRepository.existsById("student2")) {
+            if (!studentRepository.existsById("student2")) {
                 User student2 = new User();
                 student2.setEmail("student2@sample.app");
                 student2.setId("student2");
                 student2.setPassword(defaultPassword);
                 student2.encodePassword();
-                userRepository.save(student2);
+                studentRepository.save(student2);
             }
         }
         if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
             // Testing instances
-            if (!userRepository.existsById("professor1")) {
+            if (!professorRepository.existsById("professor1")) {
                 User professor1 = new User();
                 professor1.setEmail("professor1@sample.app");
                 professor1.setId("professor1");
                 professor1.setPassword(defaultPassword);
                 professor1.encodePassword();
-                userRepository.save(professor1);
+                professorRepository.save(professor1);
             }
         }
         if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
             // Testing instances
-            if (!userRepository.existsById("external1")) {
+            if (!externalRepository.existsById("external1")) {
                 User external1 = new User();
                 external1.setEmail("external1@sample.app");
                 external1.setId("external1");
                 external1.setPassword(defaultPassword);
                 external1.encodePassword();
-                userRepository.save(external1);
+                externalRepository.save(external1);
             }
         }
     }
