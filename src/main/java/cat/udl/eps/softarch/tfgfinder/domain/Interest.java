@@ -34,7 +34,6 @@ public class Interest extends UriEntity<Long> {
 	// Relations
 
 	@ManyToOne
-	@JoinColumn(name="user_id")
 	private User user;
 
 	@ManyToOne
