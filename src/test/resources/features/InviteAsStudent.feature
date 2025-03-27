@@ -3,22 +3,34 @@ Feature: Invite as Student
   As a student
   I want to invite them to join my proposal
 
+  #fer background :)
+  # crearem el student1 i totes les instàncies necessàries
+
   Scenario: Successfully invite a professor
     Given I login as "student1" with password "password"
-    #And There is a registered professor with name "professor1"
+    And "student1" is a student
+    #And There is a registered user with username "professor1"
+    #When I send an invite to "professor1" for the proposal "ProposalX"
+    #Then The response code is 201
+    #And The user "professor1" has a pending invitation for "ProposalX"
+
+  Scenario: Successfully invite a professor
+    Given I login as "student1" with password "password"
+    #And "student1" is a "student" type user
+    #And There is a registered user with username "professor1"
     #When I send an invite to "professor1" for the proposal "ProposalX"
     #Then The response code is 201
     #And The user "professor1" has a pending invitation for "ProposalX"
 
   Scenario: Successfully invite an external
-    Given I am logged in as a student with name "student1"
+    Given I login as "student1" with password "password"
     And There is a registered external user with name "external1"
     When I send an invite to "external1" for the proposal "ProposalX"
     Then The response code is 201
     And The user "external1" has a pending invitation for "ProposalX"
 
   Scenario: Fail to invite another student
-    Given I am logged in as a student with name "student1"
+    Given I login as "student1" with password "password"
     And There is a registered student with name "student2"
     When I send an invite to "student2" for the proposal "ProposalX"
     Then The response code is 403
