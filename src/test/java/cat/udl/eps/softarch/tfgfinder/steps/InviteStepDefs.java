@@ -1,14 +1,10 @@
 package cat.udl.eps.softarch.tfgfinder.steps;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
 import cat.udl.eps.softarch.tfgfinder.domain.User;
 import cat.udl.eps.softarch.tfgfinder.repository.ExternalRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.ProfessorRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.StudentRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.And;
 import org.junit.Assert;
@@ -18,6 +14,9 @@ public class InviteStepDefs {
 
     @Autowired
     private StepDefs stepDefs;
+
+    @Autowired
+    private UserRepository userRepository; //cal?
 
     @Autowired
     private StudentRepository studentRepository;
@@ -38,7 +37,7 @@ public class InviteStepDefs {
             student.encodePassword();
             studentRepository.save(student);
         }
-    }
+    } // mirar si fem 3 separats, o fem 1 genèric d'user i li posem ifs a dins, per fer cadasun
 
     @Given("There is a registered professor with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsARegisteredProfessorWithUsernameAndPasswordAndEmail(String username, String password, String email) {
@@ -82,50 +81,3 @@ public class InviteStepDefs {
                 externalRepository.existsById(username));
     }
 }
-
-/*
-//if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
-            // Testing instances
-            if (!studentRepository.existsById("student1")) {
-                User student1 = new User();
-                student1.setEmail("student1@sample.app");
-                student1.setId("student1");
-                student1.setPassword(defaultPassword);
-                student1.encodePassword();
-                studentRepository.save(student1);
-            }
-        //}
-        //if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
-            // Testing instances
-            if (!studentRepository.existsById("student2")) {
-                User student2 = new User();
-                student2.setEmail("student2@sample.app");
-                student2.setId("student2");
-                student2.setPassword(defaultPassword);
-                student2.encodePassword();
-                studentRepository.save(student2);
-            }
-        //}
-        //if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
-            // Testing instances
-            if (!professorRepository.existsById("professor1")) {
-                User professor1 = new User();
-                professor1.setEmail("professor1@sample.app");
-                professor1.setId("professor1");
-                professor1.setPassword(defaultPassword);
-                professor1.encodePassword();
-                professorRepository.save(professor1);
-            }
-        //}
-        //if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
-            // Testing instances
-            if (!externalRepository.existsById("external1")) {
-                User external1 = new User();
-                external1.setEmail("external1@sample.app");
-                external1.setId("external1");
-                external1.setPassword(defaultPassword);
-                external1.encodePassword();
-                externalRepository.save(external1);
-            }
-        //}
- */
