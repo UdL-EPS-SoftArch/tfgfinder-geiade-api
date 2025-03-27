@@ -1,10 +1,13 @@
 Feature: Invite as Student
-  In order to collaborate in the proposal with professors and externals
+  In order to collaborate with professors and/or externals
   As a student
   I want to invite them to join my proposal
 
-  #fer background :)
-  # crearem el student1 i totes les instàncies necessàries
+  Background:
+    Given There is a registered user with username "student1" and password "<password>" and email "<student1@example.com>"
+    Given There is a registered user with username "student2" and password "<password>" and email "<student2@example.com>"
+    Given There is a registered user with username "professor1" and password "<password>" and email "<professor1@example.com>"
+    Given There is a registered user with username "external1" and password "<password>" and email "<external1@example.com>"
 
   Scenario: Successfully invite a professor
     Given I login as "student1" with password "password"
@@ -16,7 +19,7 @@ Feature: Invite as Student
 
   Scenario: Successfully invite a professor
     Given I login as "student1" with password "password"
-    #And "student1" is a "student" type user
+    And "student1" is a student
     #And There is a registered user with username "professor1"
     #When I send an invite to "professor1" for the proposal "ProposalX"
     #Then The response code is 201
