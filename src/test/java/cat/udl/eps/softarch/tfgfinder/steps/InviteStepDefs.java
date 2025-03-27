@@ -3,25 +3,16 @@ package cat.udl.eps.softarch.tfgfinder.steps;
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import cat.udl.eps.softarch.tfgfinder.config.WebSecurityConfig;
-import cat.udl.eps.softarch.tfgfinder.domain.Student;
 import cat.udl.eps.softarch.tfgfinder.domain.User;
 import cat.udl.eps.softarch.tfgfinder.repository.ExternalRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.ProfessorRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.StudentRepository;
-import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 public class InviteStepDefs {
 
@@ -37,9 +28,40 @@ public class InviteStepDefs {
     @Autowired
     private ExternalRepository externalRepository;
 
-    @Given("There is a registered user with username {string} and password {string} and email {string}")
-    public void thereIsARegisteredUserWithUsernameAndPasswordAndEmail(String username, String password, String email) {
-        //to do
+    @Given("There is a registered student with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsARegisteredStudentWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+        if (!studentRepository.existsById(username)) {
+            User student = new User();
+            student.setEmail(email);
+            student.setId(username);
+            student.setPassword(password);
+            student.encodePassword();
+            studentRepository.save(student);
+        }
+    }
+
+    @Given("There is a registered professor with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsARegisteredProfessorWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+        if (!studentRepository.existsById(username)) {
+            User professor = new User();
+            professor.setEmail(email);
+            professor.setId(username);
+            professor.setPassword(password);
+            professor.encodePassword();
+            professorRepository.save(professor);
+        }
+    }
+
+    @Given("There is a registered external with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsARegisteredExternalWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+        if (!studentRepository.existsById(username)) {
+            User external = new User();
+            external.setEmail(email);
+            external.setId(username);
+            external.setPassword(password);
+            external.encodePassword();
+            externalRepository.save(external);
+        }
     }
 
     @And("^\"([^\"]*)\" is a student")

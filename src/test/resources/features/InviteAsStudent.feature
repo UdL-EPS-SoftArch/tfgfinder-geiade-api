@@ -4,10 +4,10 @@ Feature: Invite as Student
   I want to invite them to join my proposal
 
   Background:
-    Given There is a registered user with username "student1" and password "<password>" and email "<student1@example.com>"
-    Given There is a registered user with username "student2" and password "<password>" and email "<student2@example.com>"
-    Given There is a registered user with username "professor1" and password "<password>" and email "<professor1@example.com>"
-    Given There is a registered user with username "external1" and password "<password>" and email "<external1@example.com>"
+    Given There is a registered student with username "student1" and password "password" and email "student1@sample.app"
+    Given There is a registered student with username "student2" and password "password" and email "student2@sample.app"
+    Given There is a registered professor with username "professor1" and password "password" and email "professor1@sample.app"
+    Given There is a registered external with username "external1" and password "password" and email "external1@sample.app"
 
   Scenario: Successfully invite a professor
     Given I login as "student1" with password "password"
