@@ -7,6 +7,7 @@ import cat.udl.eps.softarch.tfgfinder.repository.StudentRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +17,7 @@ public class InviteStepDefs {
     private StepDefs stepDefs;
 
     @Autowired
-    private UserRepository userRepository; //cal?
+    private UserRepository userRepository;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -36,6 +37,7 @@ public class InviteStepDefs {
             student.setPassword(password);
             student.encodePassword();
             studentRepository.save(student);
+            userRepository.save(student); //mirar si és redundant, o si està bé així + idem altres
         }
     } // mirar si fem 3 separats, o fem 1 genèric d'user i li posem ifs a dins, per fer cadasun
 
@@ -48,6 +50,7 @@ public class InviteStepDefs {
             professor.setPassword(password);
             professor.encodePassword();
             professorRepository.save(professor);
+            userRepository.save(professor);
         }
     }
 
@@ -60,6 +63,7 @@ public class InviteStepDefs {
             external.setPassword(password);
             external.encodePassword();
             externalRepository.save(external);
+            userRepository.save(external);
         }
     }
 
@@ -79,5 +83,16 @@ public class InviteStepDefs {
     public void itIsExternal(String username) {
         Assert.assertTrue("User \"" + username + "\" exists",
                 externalRepository.existsById(username));
+    }
+
+    @And("^\"([^\"]*)\" is a registered user")
+    public void isARegisteredUser(String username) {
+        Assert.assertTrue("User \"" + username + "\" exists",
+                userRepository.existsById(username));
+    }
+
+    @When("I send an invite to \"([^\"]*)\" for the proposal \"([^\"]*)\"")
+    public void iSendAnInviteToForTheProposal(String username, String proposal) {
+        //falta
     }
 }
