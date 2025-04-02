@@ -11,5 +11,6 @@ import java.util.List;
 
 @Repository
 public interface InterestRepository extends CrudRepository<Interest, Long>, PagingAndSortingRepository<Interest, Long> {
+    // Find a list of Proposal
     List<Interest> findByProposal(@Param("proposal") Proposal proposal);
 }
