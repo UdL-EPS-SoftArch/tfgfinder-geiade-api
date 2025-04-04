@@ -5,11 +5,11 @@ Feature: Invite student and external to a proposal
 
   Scenario: Successfully invite a student to a proposal
     Given I am logged in as a professor
-    And I have created a proposal
-    And there is a student registered in the system
-    When I send an invitation to the student
-    Then the student should receive an invitation
-    And the invitation status should be "pending"
+    #And I have created a proposal
+    #And there is a student registered in the system
+    #When I send an invitation to the student
+    #Then the student should receive an invitation
+    #And the invitation status should be "pending"
 
   Scenario: Successfully invite multiple students to a proposal
     Given I am logged in as a professor

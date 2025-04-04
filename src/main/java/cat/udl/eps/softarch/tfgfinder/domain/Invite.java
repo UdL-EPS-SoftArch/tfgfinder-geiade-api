@@ -35,4 +35,5 @@ public class Invite extends UriEntity<Long>  {
     @JsonIdentityReference(alwaysAsId = true)
     private Proposal what;
 
+
 }

@@ -8,13 +8,15 @@ Feature: Invite as Student
     Given There is a registered student with username "student2" and password "password" and email "student2@sample.app"
     Given There is a registered professor with username "professor1" and password "password" and email "professor1@sample.app"
     Given There is a registered external with username "external1" and password "password" and email "external1@sample.app"
+    Given There is a proposal "proposal1"
 
   Scenario: Successfully invite a professor
     Given I login as "student1" with password "password"
     And "student1" is a student
     And "professor1" is a registered user
     And "professor1" is a professor
-    #When I send an invite to "professor1" for the proposal "ProposalX"
+    #When I create the invitation for user "professor1" to participate in proposal "proposal"
+    #When "student1" send an invite to "professor1"
     #Then The response code is 201
     #And The user "professor1" has a pending invitation for "ProposalX"
 

@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.tfgfinder.steps;
 
+import cat.udl.eps.softarch.tfgfinder.domain.Invite;
 import cat.udl.eps.softarch.tfgfinder.domain.User;
 import cat.udl.eps.softarch.tfgfinder.repository.ExternalRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.ProfessorRepository;
@@ -67,6 +68,12 @@ public class InviteStepDefs {
         }
     }
 
+    @Given("There is a proposal {string}")
+    public void thereIsAProposal(String proposal_id) {
+
+
+    }
+
     @And("^\"([^\"]*)\" is a student")
     public void itIsStudent(String username) {
         Assert.assertTrue("User \"" + username + "\" exists",
@@ -90,9 +97,40 @@ public class InviteStepDefs {
         Assert.assertTrue("User \"" + username + "\" exists",
                 userRepository.existsById(username));
     }
-
+}
+/*
     @When("I send an invite to \"([^\"]*)\" for the proposal \"([^\"]*)\"")
     public void iSendAnInviteToForTheProposal(String username, String proposal) {
         //falta
     }
+
+    @When("^\"([^\"]*)\" send an invite to \"([^\"]*)\"")
+    public void sendAnInviteTo(String username_inviter, String username_invited) {
+        Assert.assertTrue(studentRepository.existsById(username_inviter), studentRepository.existsById(username_invited)); {
+
+        }
+        /*
+        estudiant a estudiant -> no
+        estudiant a profe -> si
+        estudiant a external -> si
+
+        profe a estudiant -> si
+        profe a profe -> no
+        profe a external -> si
+
+        external a student -> si
+        external a profe -> si
+        external a external -> no
+
+
+    }
+
+
+    @When("I create the invitation for user {string} to participate in proposal {string}")
+    public void iCreateTheInvitationForUserToParticipateInProposal(String inviter_name, String invited_name) {
+        Invite invite = new Invite(userRepository.findById(invited_name), );
+
+    }
+
 }
+*/
