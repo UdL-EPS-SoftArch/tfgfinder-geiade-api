@@ -1,10 +1,14 @@
 package cat.udl.eps.softarch.tfgfinder.config;
 import cat.udl.eps.softarch.tfgfinder.domain.User;
+import cat.udl.eps.softarch.tfgfinder.repository.ExternalRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.ProfessorRepository;
 import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
+
 
 @Configuration
 public class DBInitialization {
@@ -13,9 +17,16 @@ public class DBInitialization {
     @Value("${spring.profiles.active:}")
     private String activeProfiles;
     private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
+    private final ProfessorRepository professorRepository;
+    private final ExternalRepository externalRepository;
 
-    public DBInitialization(UserRepository userRepository) {
+
+    public DBInitialization(UserRepository userRepository, StudentRepository studentRepository, ProfessorRepository professorRepository, ExternalRepository externalRepository) {
         this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
+        this.professorRepository = professorRepository;
+        this.externalRepository = externalRepository;
     }
 
     @PostConstruct
