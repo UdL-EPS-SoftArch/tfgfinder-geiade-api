@@ -9,24 +9,21 @@ Background:
 
 
 Scenario: Create an interest being logged in
-    Given I'm logged in
-    And Don't exist Interest with user "user" and id 1
+    Given Don't exist Interest with user "user" and id "1"
     Then The response code is 201
-    And There is 1 Interest created with user "user" and proposal id 1
+    And There is 1 Interest created with user "user" and proposal id "1"
 
 
 Scenario: Create an interest without being logged in
-    Given I'm not logged in
-    When I create an interest with user "user" and proposal id 1
+    Given I create an interest with user "user" and proposal id "1"
     Then The response code is 401
     And The error message is "Unauthorized"
-    And There is 0 Interest created with user "user" and proposal id 1
+    And There is 0 Interest created with user "user" and proposal id "1"
 
 
 Scenario: Create an interest that already exists
-    Given Exists an interest with user "user" and proposal id 1
-    And I'm logged in
-    When I create an interest with user "user" and proposal id 1
+    Given Exists an interest with user "user" and proposal id "1"
+    When I create an interest with user "user" and proposal id "1"
     Then The response code is 401
     And The error message is "Unauthorized"
-    And There is 1 Interest created with user "user" and proposal id 1
+    And There is 1 Interest created with user "user" and proposal id "1"
