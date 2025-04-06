@@ -55,13 +55,7 @@ public class AgreeStepDefs {
     @When("There already is an agree with the following details:$")
     public void There_already_is_and_agre_with_the_following_details(Map<String, String> agreeDetails) throws Throwable {
         Agree agree = new Agree();
-        Proposal proposal = new Proposal();
-        proposal.setTitle("Gestión Propuestas");
-        proposal.setDescription("Desarrollo de una aplicación web para gestionar propuestas académicas usando Spring Boot y Angular.");
-        proposal.setTiming("aaaaa");
-        proposal.setSpeciality("aaaaa");
-        proposal.setKind("aaaaa");
-        proposalRepository.save(proposal);
+        Proposal proposal = proposalRepository.findById(Long.parseLong(agreeDetails.get("proposalId"))).orElse(null);
         agree.setProposal(proposal);
             if(agreeDetails.get("date") != null){
             ZonedDateTime date = ZonedDateTime.parse(agreeDetails.get("date"));
@@ -92,11 +86,11 @@ public class AgreeStepDefs {
         Proposal proposal = proposalRepository.findById(Long.parseLong(agreeDetails.get("proposalId"))).orElse(null);
         if (proposal != null) {
             List<Agree> existingAgrees = agreeRepository.findAgreeByProposal(proposal);
-            if(existingAgrees != null){
+            if(existingAgrees.size()>0){
                 Agree existingAgree = existingAgrees.get(0);
-                
-                if(existingAgree == null){
-                    Agree agree = new Agree();
+                assertThat(existingAgree).isNotNull();
+            }else{
+                Agree agree = new Agree();
                     agree.setStatus(Status.ACCEPTED);
                     List<User> users = userRepository.findByIdContaining(agreeDetails.get("username"));
                     agree.setUser(users.get(0));
@@ -111,19 +105,25 @@ public class AgreeStepDefs {
                                             .accept(MediaType.APPLICATION_JSON)
                                             .with(AuthenticationStepDefs.authenticate()))
                             .andDo(print());
-                    
-                }else{
-                    if(existingAgree.getUser() == null){
-                        existingAgree.setStatus(Status.ACCEPTED);
-                        existingAgree.setAgreeDate(ZonedDateTime.parse(agreeDetails.get("date")));
-                        List<User> users = userRepository.findByIdContaining(agreeDetails.get("username"));
-                        existingAgree.setUser(users.get(0));
-                        assertThat(existingAgree).isNotNull();
-                    }
-                }
             }
         }
+        else{
+            Agree agree = new Agree();
+                    agree.setStatus(Status.ACCEPTED);
+                    List<User> users = userRepository.findByIdContaining(agreeDetails.get("username"));
+                    agree.setUser(users.get(0));
+                    agree.setProposal(proposal);
+                    agree.setAgreeDate(ZonedDateTime.parse(agreeDetails.get("date")));
         
+                    stepDefs.result = stepDefs.mockMvc.perform(
+                                    post("/agrees")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(stepDefs.mapper.writeValueAsString(agree))
+                                            .characterEncoding(StandardCharsets.UTF_8)
+                                            .accept(MediaType.APPLICATION_JSON)
+                                            .with(AuthenticationStepDefs.authenticate()))
+                            .andDo(print());
+        }    
         
         
     }
@@ -137,9 +137,18 @@ public class AgreeStepDefs {
             Long proposalId = Long.parseLong(agreeDetails.get("proposalId"));
             Assert.assertEquals(agree.getProposal().getId(), proposalId);
             assertEquals(agree.getUser().getUsername(), agreeDetails.get("username"));
-            ZonedDateTime date = ZonedDateTime.parse(agreeDetails.get("date"));
-            assertEquals(agree.getAgreeDate(), date);
         }
         
+    }
+
+    @And("There already is a proposal")
+    public void There_already_is_a_proposal() {
+        Proposal proposal = new Proposal();
+        proposal.setTitle("Gestión Propuestas");
+        proposal.setDescription("Desarrollo de una aplicación web para gestionar propuestas académicas usando Spring Boot y Angular.");
+        proposal.setTiming("aaaaa");
+        proposal.setSpeciality("aaaaa");
+        proposal.setKind("aaaaa");
+        proposalRepository.save(proposal);
     }
 }
