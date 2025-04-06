@@ -27,7 +27,7 @@ public class CreateInterestStepDefs {
     
     public static String currentUsername;
 
-    
+
     @Autowired
     private StepDefs stepDefs;
 
@@ -77,6 +77,16 @@ public class CreateInterestStepDefs {
             userRepository.save(user);
 
             this.currentUsername = username;
+        }
+    }
+
+
+    @And("^There isn't a user with user \"([^\"]*)\"$")
+    public void thereIsntAUserWithUserAndPassword(String username)
+    {
+        if (userRepository.existsById(username)) 
+        {
+            userRepository.delete(userRepository.findById(username).get());
         }
     }
 
@@ -131,6 +141,14 @@ public class CreateInterestStepDefs {
                 .anyMatch(interest -> interest.getUser().getUsername().equals(user)));
         }
     }
+
+
+    @When("I create an interest with user \"([^\"]*)\" and proposal id \"([^\"]*)\"")
+    public void ICreateAnInterestWithUserAndProposalId(String username, long proposalId)
+    {
+        
+    }
+
 
     @Then("^I show interest to proposal id \"([^\"]*)\"$")
     public void IShowInterestToProposalId(long id) throws Exception
