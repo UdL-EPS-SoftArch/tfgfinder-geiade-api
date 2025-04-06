@@ -6,10 +6,12 @@ Feature: Create Interest
     
 Background:
     Given There is a proposal with id "1"
+    And There is a user with user "user" and password "password"
 
 
 Scenario: Create an interest being logged in
     Given Don't exist Interest with user "user" and id "1"
+    When I show interest to proposal id "1"
     Then The response code is 201
     And There is 1 Interest created with user "user" and proposal id "1"
 
