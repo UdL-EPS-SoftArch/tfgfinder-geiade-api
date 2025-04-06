@@ -51,4 +51,13 @@ public class Proposal extends UriEntity<Long> {
     @ManyToOne //Changed to many to one.
     @NotNull
     private Category category;
+
+    // Mandatory once accepted: at least one professor
+    @ManyToOne
+    private Professor professor;
+
+    // Optional Co-Director (Director/External/Professor)
+    @ManyToOne
+    private Director coDirector;
+
 }
