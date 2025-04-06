@@ -1,0 +1,184 @@
+package cat.udl.eps.softarch.tfgfinder.steps;
+
+import cat.udl.eps.softarch.tfgfinder.domain.*;
+import cat.udl.eps.softarch.tfgfinder.repository.*;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import org.junit.jupiter.api.Assertions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+
+import java.time.ZonedDateTime;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+public class InviteUserStepDefs {
+
+    @Autowired
+    private StepDefs stepDefs;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ProfessorRepository professorRepository;
+
+    @Autowired
+    private ExternalRepository externalRepository;
+
+    @Autowired
+    private ProposalRepository proposalRepository;
+
+    @Autowired
+    private InviteRepository inviteRepository;
+
+    @And("{string} is a Student with name {string}, surname {string}, DNI {string}, address {string}, municipality {string}, postalCode {string}, phoneNumber {string} and degree {string}")
+    public void isAStudentWithNameSurnameDNIAddressMunicipalityPostalCodePhoneNumberAndDegree(String username, String name, String surname, String dni, String address, String municipality, String postalCode, String phoneNumber, String degree) {
+        if (studentRepository.findByNameContaining(name) == null) {
+            Student student = new Student();
+            student.setName(name);
+            student.setSurname(surname);
+            student.setDNI(dni);
+            student.setAddress(address);
+            student.setMunicipality(municipality);
+            student.setPostalCode(postalCode);
+            student.setPhoneNumber(phoneNumber);
+            student.setDegree(degree);
+            studentRepository.save(student);
+        }
+
+    }
+
+    @And("{string} is a Professor with name {string} and surname {string} of faculty {string} and department {string}")
+    public void isAProfessorWithNameAndSurnameOfFacultyAndDepartment(String username, String name, String surname, String faculty, String department) {
+        if (professorRepository.findByDepartmentContaining(department) == null) {
+            Professor professor = new Professor();
+            professor.setUsername(username);
+            professor.setName(name);
+            professor.setSurname(surname);
+            professor.setFaculty(faculty);
+            professor.setDepartment(department);
+            professorRepository.save(professor);
+        }
+    }
+
+    @And("{string} is an External with name {string}, surname {string}, position {string}, organization {string}, address {string}, municipality {string}, postalCode {string}, phoneNumber {string}")
+    public void isAnExternalWithNameSurnamePositionOrganizationAddressMunicipalityPostalCodePhoneNumber(String username, String name, String surname, String position, String organization, String address, String municipality, String postalCode, String phoneNumber) {
+        if (externalRepository.findByOrganizationContaining(organization) == null) {
+            External external = new External();
+            external.setUsername(username);
+            external.setName(name);
+            external.setSurname(surname);
+            external.setPosition(position);
+            external.setOrganization(organization);
+            external.setAddress(address);
+            external.setMunicipality(municipality);
+            external.setPostalCode(postalCode);
+            external.setPhoneNumber(phoneNumber);
+            externalRepository.save(external);
+        }
+    }
+
+    @Given("There is a proposal titled {string} with description {string} and timing {string} and specialty {string} and kind {string}")
+    public void thereIsAProposalTitledWithDescriptionAndTimingAndSpecialtyAndKind(String title, String description, String timing, String specialty, String kind) {
+        if (proposalRepository.findProposalByTitle(title) == null) {
+            Proposal proposal = new Proposal();
+            proposal.setTitle(title);
+            proposal.setDescription(description);
+            proposal.setTiming(timing);
+            proposal.setSpeciality(specialty);
+            proposal.setKind(kind);
+            proposalRepository.save(proposal);
+        }
+    }
+
+    @Then("I create an invite to user {string} for proposal {string} with status {string} and date {string}")
+    public void iCreateAnInviteToUserForProposalWithStatusAndDate(String whoUsername, String proposalTitle, String status, String dateString) throws Exception {
+        Proposal proposal = proposalRepository.findProposalByTitle(proposalTitle);
+        ZonedDateTime date = ZonedDateTime.parse(dateString);
+        User who = userRepository.findUserById(whoUsername);
+
+        Invite invite = new Invite();
+        invite.setWho(who);
+        invite.setWhat(proposal);
+        invite.setStatus(status);
+        invite.setInviteDate(date);
+        inviteRepository.save(invite);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/invites")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(invite))
+                                .accept(MediaType.APPLICATION_JSON).with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @Then("The invite to user {string} of proposal {string} is created with status {string}")
+    public void theInviteToUserOfProposalShouldBeCreatedWithStatus(String whoUsername, String whatTitle, String status) throws Exception {
+        User who = userRepository.findUserById(whoUsername);
+        Proposal what = proposalRepository.findProposalByTitle(whatTitle);
+        Invite invite = inviteRepository.findByWhoAndWhat(who, what);
+
+        assertEquals(status, invite.getStatus());
+
+        stepDefs.mockMvc.perform(
+                get("/invites/{id}", invite.getId())
+                        .param("whoUsername", whoUsername)
+                        .param("proposalTitle", whatTitle)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate())
+        ).andExpect(jsonPath("$.status").value(invite.getStatus()));
+    }
+
+    @Then("{string} creates an invite to user {string} for proposal {string} with status {string} and date {string}")
+    public void createsAnInviteToUserForProposalWithStatusAndDate(String ownUsername, String whoUsername, String proposalTitle, String status, String dateString) throws Exception {
+        Proposal proposal = proposalRepository.findProposalByTitle(proposalTitle);
+        ZonedDateTime date = ZonedDateTime.parse(dateString);
+        User who = userRepository.findUserById(whoUsername);
+
+        if ((isStudent(ownUsername) && isStudent(whoUsername)) || (isProfessor(ownUsername) && isProfessor(whoUsername)) || (isExternal(ownUsername) && isExternal(whoUsername))) {
+            return;
+        }
+
+        Invite invite = new Invite();
+        invite.setWho(who);
+        invite.setWhat(proposal);
+        invite.setStatus(status);
+        invite.setInviteDate(date);
+        inviteRepository.save(invite);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/invites")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(invite))
+                                .accept(MediaType.APPLICATION_JSON).with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    private boolean isStudent(String username) {
+        return studentRepository.existsById(username);
+    }
+
+    private boolean isProfessor(String username) {
+        return professorRepository.existsById(username);
+    }
+
+    private boolean isExternal(String username) {
+        return externalRepository.existsById(username);
+    }
+
+    @Then("The invite will not be created")
+    public void the_proposal_should_not_be_created() {
+        Invite invite = new Invite();
+        Assertions.assertNull(invite.getId());
+    }
+}
