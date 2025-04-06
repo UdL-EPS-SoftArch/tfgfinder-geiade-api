@@ -5,29 +5,45 @@ Feature: Create Interest
 
     
 Background:
-    Given There is a proposal with id "1"
-    And There is a user with user "user" and password "password"
-
-
-Scenario: Create an interest being logged in
-    Given Don't exist Interest with user "user" and id "1"
-    When I show interest to proposal id "1"
+    Given There is no registered user with username "user"
+    And I'm not logged in
+    When I register a new user with username "user", email "user@sample.app" and password "password"
     Then The response code is 201
-    And There is 1 Interest created with user "user" and proposal id "1"
+    And It has been created a user with username "user" and email "user@sample.app", the password is not returned
+    And I can login with username "user" and password "password"
 
+Scenario: Try to create an already created interest
+    Given I can login with username "user" and password "password"
+    And There is a proposal created
+    When There already is an interest with the following details:
+      | proposalId  | 1     |
+      | username    | user  |
+      | status      |pending|
+      | date        | 2024-03-17T08:00:00+01:00 |
+    And I try to create an interest with the following details:
+      | proposalId  | 1     |
+      | username    | user  |
+      | status      |pending|
+      | date        | 2024-03-17T08:00:00+01:00 |
+    Then The response code is 200
+    And There is only 1 interest with the details:
+      | proposalId  | 1     |
+      | username    | user  |
+      | status      |pending|
+      | date        | 2024-03-17T08:00:00+01:00 |
 
-Scenario: Create an interest without being logged in
-    Given Don't exist Interest with user "user" and id "1"
-    And There isn't a user with user "user"
-    When I create an interest with user "user" and proposal id "1"
-    Then The response code is 401
-    And The error message is "Unauthorized"
-    And There is 0 Interest created with user "user" and proposal id "1"
-
-
-Scenario: Create an interest that already exists
-    Given Exists an interest with user "user" and proposal id "1"
-    When I create an interest with user "user" and proposal id "1"
-    Then The response code is 401
-    And The error message is "Unauthorized"
-    And There is 1 Interest created with user "user" and proposal id "1"
+@current
+Scenario: Try to create a new interest
+    Given I can login with username "user" and password "password"
+    And There is a proposal created
+    When I try to create an interest with the following details:
+      | proposalId  | 1     |
+      | username    | user  |
+      | status      |pending|
+      | date        | 2024-03-17T08:00:00+01:00 |
+    Then The response code is 201
+    And There is only 1 interest with the details:
+      | proposalId  | 1     |
+      | username    | user  |
+      | status      |pending|
+      | date        | 2024-03-17T08:00:00+01:00 |
