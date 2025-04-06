@@ -113,7 +113,7 @@ public class CreateInterestStepDefs {
                 interest.setProposal(proposal);
                 ZonedDateTime date = ZonedDateTime.parse(interestDetails.get("date"));
                 interest.setCreatedDate(date);
-                System.out.println(interest.getId() + " " + interest.getCreatedDate() + " " + interest.getProposal() + " " + interest.getUser() + " " + interest.getStatus());
+                System.out.println(interest.getUser().toString());
                 stepDefs.result = stepDefs.mockMvc.perform(
                                 post("/interests")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,7 +131,16 @@ public class CreateInterestStepDefs {
         assertEquals(interestCreatedNum, interestRepository.count());
         if(interestCreatedNum == 1){
             Interest interest = interestRepository.findAll().iterator().next();
-            assertEquals(interest.getStatus(), Status.PENDING);
+            String statusString = interestDetails.get("status");
+                Status status = null;
+                if(statusString.equals("accepted")){
+                    status = Status.ACCEPTED;
+                }else if(statusString.equals("pending")){
+                    status = Status.PENDING;
+                }else if(statusString.equals("rejected")){
+                    status = Status.REJECTED;
+                }
+            assertEquals(interest.getStatus(), status);
             Long proposalId = Long.parseLong(interestDetails.get("proposalId"));
             Assert.assertEquals(interest.getProposal().getId(), proposalId);
             assertEquals(interest.getUser().getUsername(), interestDetails.get("username"));

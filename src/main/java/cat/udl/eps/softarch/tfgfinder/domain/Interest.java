@@ -39,6 +39,8 @@ public class Interest extends UriEntity<Long> {
 	// Relations
 
 	@ManyToOne
+	@NotNull
+    @JsonIdentityReference(alwaysAsId = true)
 	private User user;
 
 	@ManyToOne
