@@ -14,7 +14,8 @@ import java.util.List;
 public interface AgreeRepository extends CrudRepository<Agree, Long>, PagingAndSortingRepository<Agree, Long> {
     List<Agree> findAgreeByAgreeDate(@Param("agreeDate") ZonedDateTime agreeDate);
     List<Agree> findAgreeByStatus(Agree.@NotNull Status status);
-    List<Agree> findAgreesByProposal(@Param("proposal") Proposal proposal);
+    List<Agree> findAgreeByProposal(@Param("proposal") Proposal proposal);
     List<Agree> findAgreeByUser(@Param("user") User user);
+    Agree findAgreeByProposalAndUser(@Param("proposal") Proposal proposal, @Param("user") User user);
 
 }
