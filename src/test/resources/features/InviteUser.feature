@@ -4,20 +4,12 @@ Feature: Invite creation
   I want to invite others to join my proposal
 
   Background:
-    Given There is a registered user with username "student1" and password "password"
-    And "student1" is a Student with name "Diego", surname "Colás", DNI "12345678A", address "123 Street", municipality "City", postalCode "12345", phoneNumber "600123456" and degree "Computer Science"
-    Given There is a registered user with username "student2" and password "password"
-    And "student2" is a Student with name "Claudia", surname "Giribet", DNI "23456789B", address "456 Street", municipality "City", postalCode "12345", phoneNumber "600987654" and degree "Mathematics"
-
-    Given There is a registered user with username "professor1" and password "password"
-    And "professor1" is a Professor with name "Roberto" and surname "García" of faculty "EPS" and department "Computer Engineering"
-    Given There is a registered user with username "professor2" and password "password"
-    And "professor2" is a Professor with name "Àngela" and surname "Vázquez" of faculty "EPS" and department "Mathematics"
-
-    Given There is a registered user with username "external1" and password "password"
-    And "external1" is an External with name "Ringo", surname "Giné", position "Consultant", organization "Tech Corp", address "789 Corporate Blvd", municipality "Tech City", postalCode "54321", phoneNumber "600123789"
-    Given There is a registered user with username "external2" and password "password"
-    And "external2" is an External with name "Francesc", surname "Tena", position "Senior Engineer", organization "Innovative Solutions", address "101 Innovation Rd", municipality "Innovate City", postalCode "98765", phoneNumber "600987321"
+    Given "student1" is a Student with name "Diego", surname "Colás", DNI "12345678A", address "123 Street", municipality "City", postalCode "12345", phoneNumber "600123456" and degree "Computer Science" and email "s1@gmail.com" and password "passwordpassword"
+    And "student2" is a Student with name "Claudia", surname "Giribet", DNI "23456789B", address "456 Street", municipality "City", postalCode "12345", phoneNumber "600987654" and degree "Mathematics" and email "s2@gmail.com" and password "passwordpassword"
+    And "professor1" is a Professor with name "Roberto" and surname "García" of faculty "EPS" and department "Computer Engineering" and email "p1@gmail.com" and password "passwordpassword"
+    And "professor2" is a Professor with name "Àngela" and surname "Vázquez" of faculty "EPS" and department "Mathematics" and email "p2@gmail.com" and password "passwordpassword"
+    And "external1" is an External with name "Ringo", surname "Giné", position "Consultant", organization "Tech Corp", address "789 Corporate Blvd", municipality "Tech City", postalCode "54321", phoneNumber "600123789" and email "e1@gmail.com" and password "passwordpassword"
+    And "external2" is an External with name "Francesc", surname "Tena", position "Senior Engineer", organization "Innovative Solutions", address "101 Innovation Rd", municipality "Innovate City", postalCode "98765", phoneNumber "600987321" and email "e2@gmail.com" and password "passwordpassword"
     Given There is a proposal titled "TREBALL FINAL DE GRAU" with description "Detailed description of the project for a final degree proposal" and timing "timing" and specialty "specialty" and kind "kindd"
 
 # Valid Invites
