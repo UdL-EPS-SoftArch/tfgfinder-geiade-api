@@ -20,7 +20,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -111,7 +110,6 @@ public class CreateProposalStepDefs {
                                 .content(stepDefs.mapper.writeValueAsString(proposal))
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         Optional<Proposal> obtainedProposal = proposalRepository.findByTitle(proposal.getTitle());
