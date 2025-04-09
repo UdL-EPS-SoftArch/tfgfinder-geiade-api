@@ -2,9 +2,8 @@ package cat.udl.eps.softarch.tfgfinder.steps;
 
 import cat.udl.eps.softarch.tfgfinder.domain.Category;
 import cat.udl.eps.softarch.tfgfinder.domain.Proposal;
-import cat.udl.eps.softarch.tfgfinder.domain.User;
 import cat.udl.eps.softarch.tfgfinder.repository.CategoryRepository;
-import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.ProposalRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,13 +11,13 @@ import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,15 +29,13 @@ public class CreateProposalStepDefs {
     @Autowired
     private StepDefs stepDefs;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private ResultActions result;
+    @Autowired
+    ProposalRepository proposalRepository;
 
-    private User user;
     private Category category;
     private Proposal proposal;
 
@@ -96,29 +93,28 @@ public class CreateProposalStepDefs {
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title", is(proposal.getTitle())))
-                .andExpect(jsonPath("$.description", is(proposal.getDescription())));
+                .andExpect(status().isCreated());
 
 
-        stepDefs.result.andExpect(status().isCreated());
+        Optional<Proposal> obtainedProposal = proposalRepository.findByTitle(proposal.getTitle());
+        assertTrue("Proposal with title " + proposal.getTitle() + "should exist", obtainedProposal.isPresent());
 
-        String title = stepDefs.result.andReturn().getResponse().getHeader("title");
-        assertNotNull("Title should not be null", title);
     }
 
-    @Then("the system should throw a constraint error")
-    public void theSystemShouldThrowAConstraintError() throws Exception {
+
+    @And("the proposal should not be created")
+    public void theProposalShouldNotBeCreated() throws Exception {
+
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/proposals")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(stepDefs.mapper.writeValueAsString(proposal))
-                                .accept(MediaType.APPLICATION_JSON))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
-    }
 
-    @And("the proposal should not be created")
-    public void theProposalShouldNotBeCreated() throws Exception {
-        result.andExpect(status().is4xxClientError());
+        Optional<Proposal> obtainedProposal = proposalRepository.findByTitle(proposal.getTitle());
+        assertFalse("Proposal with title " + proposal.getTitle() + "should exist", obtainedProposal.isPresent());
     }
 }

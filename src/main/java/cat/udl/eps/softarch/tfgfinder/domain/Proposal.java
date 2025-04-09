@@ -48,6 +48,7 @@ public class Proposal extends UriEntity<Long> {
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
+    @NotNull
     private User user; // Reference to the User entity
 
     @JsonIdentityReference(alwaysAsId = true)
