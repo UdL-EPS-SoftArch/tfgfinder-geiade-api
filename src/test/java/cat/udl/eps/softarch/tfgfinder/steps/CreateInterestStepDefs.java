@@ -1,178 +1,149 @@
 package cat.udl.eps.softarch.tfgfinder.steps;
 
-import java.util.Optional;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.junit.Assert;
+
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import cat.udl.eps.softarch.tfgfinder.domain.User;
-import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
-import cat.udl.eps.softarch.tfgfinder.domain.Proposal;
-import cat.udl.eps.softarch.tfgfinder.repository.ProposalRepository;
-import cat.udl.eps.softarch.tfgfinder.domain.Interest;
-import cat.udl.eps.softarch.tfgfinder.repository.InterestRepository;
+import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Map;
 
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.junit.Assert;
+
+import cat.udl.eps.softarch.tfgfinder.domain.Interest;
+import cat.udl.eps.softarch.tfgfinder.domain.Interest.Status;
+import cat.udl.eps.softarch.tfgfinder.domain.Proposal;
+import cat.udl.eps.softarch.tfgfinder.domain.Student;
+import cat.udl.eps.softarch.tfgfinder.domain.User;
+import cat.udl.eps.softarch.tfgfinder.repository.InterestRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.ProposalRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.StudentRepository;
+import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 
 
 public class CreateInterestStepDefs {
 
     
-    public static String currentUsername;
-
-
     @Autowired
     private StepDefs stepDefs;
 
-    
     @Autowired
-    private ProposalRepository proposalRepository;
-
-
-    @Autowired 
     private InterestRepository interestRepository;
 
+    @Autowired
+    private ProposalRepository proposalRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    // Ensure a proposal with the given ID exists in the repository. 
-    // If it doesn't, create a new one with dummy data.
-    @Given("^There is a proposal with id \"([^\"]*)\"$")
-    public void thereIsAProposalWithId(long id) 
-    {
-        if (!proposalRepository.existsById(id)) 
-        {
-            Proposal proposal = new Proposal();
-
-            proposal.setTitle("title of the project");
-            proposal.setDescription("description: This is a test description, only for testing.");
-            proposal.setTiming("timing");
-            proposal.setSpeciality("speciality");
-            proposal.setKind("kind of the project");
-
-            proposalRepository.save(proposal);
-        }
+    @Given("^There is a proposal created$")
+    public void createdProposal(){
+        Proposal proposal = new Proposal();
+        proposal.setTitle("Gestión Propuestas");
+        proposal.setDescription("Desarrollo de una aplicación web para gestionar propuestas académicas usando Spring Boot y Angular.");
+        proposal.setTiming("aaaaa");
+        proposal.setSpeciality("aaaaa");
+        proposal.setKind("aaaaa");
+        proposalRepository.save(proposal);
     }
 
-    // Ensure a user with the given username and password exists. 
-    // If not, create and save a new user with the given credentials.
-    @And("^There is a user with user \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void thereIsAUserWithUserAndPassword(String username, String password)
-    {
-        if (!userRepository.existsById(username)) 
-        {
-            User user = new User();
-
-            user.setId(username);
-            user.setEmail(username + "@sample.app");
-            user.setPassword(password);
-            user.encodePassword();
-
-            userRepository.save(user);
-
-            this.currentUsername = username;
-        }
-    }
-
-    // Ensure that a user with the specified username does NOT exist. 
-    // If the user exists, delete them.
-    @And("^There isn't a user with user \"([^\"]*)\"$")
-    public void thereIsntAUserWithUserAndPassword(String username)
-    {
-        if (userRepository.existsById(username)) 
-        {
-            userRepository.delete(userRepository.findById(username).get());
-        }
-    }
-
-    // Ensure there is no Interest with the given user and ID. 
-    // If it exists and belongs to that user, delete it.
-    @Given("^Don't exist Interest with user \"([^\"]*)\" and id \"([^\"]*)\"$")
-    public void DontExistInterestWithUserAndId(String user, long id)
-    {
-        Optional<Interest> optionalInterest = interestRepository.findById(id);
-
-        if (optionalInterest.isPresent()) 
-        {
-
-            Interest interest = optionalInterest.get();
-
-            if (interest.getUser().getUsername().equals(user)) 
-            {
-                interestRepository.delete(interest);
-            }
-        }
-    }
-
-    // Verify the number of Interest entities for a user and proposal.
-    // If `num` is 0, assert that no Interest exists for that user and proposal.
-    // If `num` is greater than 0, assert that at least one Interest exists.
-    @And("^There is ([^\"]*) Interest created with user \"([^\"]*)\" and proposal id \"([^\"]*)\"$")
-    public void ThereIs1InterestCreatedWithUserAndProposalId(int num, String user, long proposalId)
-    {
-        if (num == 0)
-        {
-            Optional<Proposal> optionalProposal = proposalRepository.findById(proposalId);
-
-            if (optionalProposal.isPresent())
-            {
-                Assert.assertTrue(false);
-            }
-
-            List<Interest> interests = interestRepository.findByProposal(optionalProposal.get());
-
-            Assert.assertEquals(0, interests.stream()
-                .anyMatch(interest -> interest.getUser().getUsername().equals(user)));
-        }
-
-        if (num > 0)
-        {
-            Optional<Proposal> optionalProposal = proposalRepository.findById(proposalId);
-
-            if (!optionalProposal.isPresent())
-            {
-                Assert.assertTrue(false);
-            }
-
-            List<Interest> interests = interestRepository.findByProposal(optionalProposal.get());
-
-            Assert.assertEquals(num, interests.stream()
-                .anyMatch(interest -> interest.getUser().getUsername().equals(user)));
-        }
-    }
-
-    // Sends a POST request to the API to express interest in a proposal 
-    // by the currently authenticated user.
-    @Then("^I show interest to proposal id \"([^\"]*)\"$")
-    public void IShowInterestToProposalId(long id) throws Exception
-    {
+    @When("There already is an interest with the following details:$")
+    public void There_already_is_an_interest_with_the_following_details(Map<String, String> interestDetails) {
         Interest interest = new Interest();
-
-        interest.setId(id);
-
-        Optional<User> optionalUser = userRepository.findById(currentUsername);
-        if (optionalUser.isPresent()) 
-        {
-            interest.setUser(optionalUser.get());
+        Proposal proposal = proposalRepository.findById(Long.parseLong(interestDetails.get("proposalId"))).orElse(null);
+        interest.setProposal(proposal);
+            if(interestDetails.get("date") != null){
+            ZonedDateTime date = ZonedDateTime.parse(interestDetails.get("date"));
+            interest.setCreatedDate(date);;
         }
-
-        String body = "{ \"proposalId\": " + id + " }";
-
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/interests")
-                        .session(stepDefs.session)
-                        .with(AuthenticationStepDefs.authenticate())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-        ).andDo(print());
+        String statusString = interestDetails.get("status");
+        Status status = null;
+        if(statusString.equals("accepted")){
+            status = Status.ACCEPTED;
+        }else if(statusString.equals("pending")){
+            status = Status.PENDING;
+        }else if(statusString.equals("rejected")){
+            status = Status.REJECTED;
+        }
+        interest.setStatus(status);
+        if(interestDetails.get("username") != null){
+            List<User> users = userRepository.findByIdContaining(interestDetails.get("username"));
+            interest.setUser(users.get(0));
+        }
+        interestRepository.save(interest);
     }
 
+    @When("I try to create an interest with the following details:$")
+    public void I_try_to_create_an_interest_with_the_following_details(Map<String, String> interestDetails) throws Exception {
+        Proposal proposal = proposalRepository.findById(Long.parseLong(interestDetails.get("proposalId"))).orElse(null);
+        if (proposal != null) {
+            List<Interest> existingInterests = interestRepository.findByProposal(proposal);
+            if(existingInterests.size()>0){
+                Interest existingInterest = existingInterests.get(0);
+                assertThat(existingInterest).isNotNull();
+            }else{
+                Interest interest = new Interest();
+                String statusString = interestDetails.get("status");
+                Status status = null;
+                if(statusString.equals("accepted")){
+                    status = Status.ACCEPTED;
+                }else if(statusString.equals("pending")){
+                    status = Status.PENDING;
+                }else if(statusString.equals("rejected")){
+                    status = Status.REJECTED;
+                }
+                interest.setStatus(status);
+                List<User> users = userRepository.findByIdContaining(interestDetails.get("username"));
+                interest.setUser(users.get(0));
+                interest.setProposal(proposal);
+                ZonedDateTime date = ZonedDateTime.parse(interestDetails.get("date"));
+                interest.setCreatedDate(date);
+                System.out.println(interest.getUser().toString());
+                stepDefs.result = stepDefs.mockMvc.perform(
+                                post("/interests")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(stepDefs.mapper.writeValueAsString(interest))
+                                        .characterEncoding(StandardCharsets.UTF_8)
+                                        .accept(MediaType.APPLICATION_JSON)
+                                        .with(AuthenticationStepDefs.authenticate()))
+                        .andDo(print());
+            }
+        }
+    }
+
+    @And("There is only (\\d+) interest with the details:$")
+    public void There_is_only_interest_with_the_details(int interestCreatedNum, Map<String, String> interestDetails) {
+        assertEquals(interestCreatedNum, interestRepository.count());
+        if(interestCreatedNum == 1){
+            Interest interest = interestRepository.findAll().iterator().next();
+            String statusString = interestDetails.get("status");
+                Status status = null;
+                if(statusString.equals("accepted")){
+                    status = Status.ACCEPTED;
+                }else if(statusString.equals("pending")){
+                    status = Status.PENDING;
+                }else if(statusString.equals("rejected")){
+                    status = Status.REJECTED;
+                }
+            assertEquals(interest.getStatus(), status);
+            Long proposalId = Long.parseLong(interestDetails.get("proposalId"));
+            Assert.assertEquals(interest.getProposal().getId(), proposalId);
+            assertEquals(interest.getUser().getUsername(), interestDetails.get("username"));
+        }
+    }
 }
