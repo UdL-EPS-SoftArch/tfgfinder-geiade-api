@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class InviteUserStepDefs {
 
@@ -62,7 +63,7 @@ public class InviteUserStepDefs {
     }
 
 
-    @And("{string} is a Student with name {string}, surname {string}, DNI {string}, address {string}, municipality {string}, postalCode {string}, phoneNumber {string} and degree {string} and email {string} and password {string}")
+    @Given("{string} is a Student with name {string}, surname {string}, DNI {string}, address {string}, municipality {string}, postalCode {string}, phoneNumber {string} and degree {string} and email {string} and password {string}")
     public void isAStudentWithNameSurnameDNIAddressMunicipalityPostalCodePhoneNumberAndDegree(String username, String name, String surname, String dni, String address, String municipality, String postalCode, String phoneNumber, String degree, String email, String password) {
         if (studentRepository.findByNameContaining(name).isEmpty()) {
             Student student = new Student();
@@ -77,11 +78,12 @@ public class InviteUserStepDefs {
             student.setDegree(degree);
             student.setEmail(email);
             student.setPassword(password);
+            student.encodePassword();
             studentRepository.save(student);
         }
     }
 
-    @And("{string} is a Professor with name {string} and surname {string} of faculty {string} and department {string} and email {string} and password {string}")
+    @Given("{string} is a Professor with name {string} and surname {string} of faculty {string} and department {string} and email {string} and password {string}")
     public void isAProfessorWithNameAndSurnameOfFacultyAndDepartment(String username, String name, String surname, String faculty, String department, String email, String password) {
         if (professorRepository.findByDepartmentContaining(department).isEmpty()) {
             Professor professor = new Professor();
@@ -92,11 +94,12 @@ public class InviteUserStepDefs {
             professor.setDepartment(department);
             professor.setEmail(email);
             professor.setPassword(password);
+            professor.encodePassword();
             professorRepository.save(professor);
         }
     }
 
-    @And("{string} is an External with name {string}, surname {string}, position {string}, organization {string}, address {string}, municipality {string}, postalCode {string}, phoneNumber {string} and email {string} and password {string}")
+    @Given("{string} is an External with name {string}, surname {string}, position {string}, organization {string}, address {string}, municipality {string}, postalCode {string}, phoneNumber {string} and email {string} and password {string}")
     public void isAnExternalWithNameSurnamePositionOrganizationAddressMunicipalityPostalCodePhoneNumber(String username, String name, String surname, String position, String organization, String address, String municipality, String postalCode, String phoneNumber, String email, String password) {
         if (externalRepository.findByOrganizationContaining(organization).isEmpty()) {
             External external = new External();
@@ -111,6 +114,7 @@ public class InviteUserStepDefs {
             external.setPhoneNumber(phoneNumber);
             external.setEmail(email);
             external.setPassword(password);
+            external.encodePassword();
             externalRepository.save(external);
         }
     }
@@ -128,8 +132,8 @@ public class InviteUserStepDefs {
         }
     }
 
-    @Then("I create an invite to user {string} for proposal {string} with status {string} and date {string}")
-    public void iCreateAnInviteToUserForProposalWithStatusAndDate(String whoUsername, String proposalTitle, String status, String dateString) throws Exception {
+    @Then("{string} creates an invite to user {string} for proposal {string} with status {string} and date {string}")
+    public void createsAnInviteToUserForProposalWithStatusAndDate(String ownUsername, String whoUsername, String proposalTitle, String status, String dateString) throws Exception {
         Proposal proposal = proposalRepository.findProposalByTitle(proposalTitle);
         ZonedDateTime date = ZonedDateTime.parse(dateString);
         User who = userRepository.findUserById(whoUsername);
@@ -145,7 +149,8 @@ public class InviteUserStepDefs {
                         post("/invites")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(stepDefs.mapper.writeValueAsString(invite))
-                                .accept(MediaType.APPLICATION_JSON).with(AuthenticationStepDefs.authenticate()))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
     }
 
@@ -157,59 +162,23 @@ public class InviteUserStepDefs {
 
         assertEquals(status, invite.getStatus());
 
-        stepDefs.mockMvc.perform(
+        stepDefs.result = stepDefs.mockMvc.perform(
                 get("/invites/{id}", invite.getId())
                         .param("whoUsername", whoUsername)
                         .param("proposalTitle", whatTitle)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate())
-        ).andExpect(jsonPath("$.status").value(invite.getStatus()));
+        )
+                .andDo(print())
+                .andExpect(jsonPath("$.status").value(invite.getStatus()));
     }
 
-    @Then("{string} creates an invite to user {string} for proposal {string} with status {string} and date {string}")
-    public void createsAnInviteToUserForProposalWithStatusAndDate(String ownUsername, String whoUsername, String proposalTitle, String status, String dateString) throws Exception {
-        if ((isStudent(ownUsername) && isStudent(whoUsername)) || (isProfessor(ownUsername) && isProfessor(whoUsername)) || (isExternal(ownUsername) && isExternal(whoUsername))) {
-            return;
-        }
-
-        Proposal proposal = proposalRepository.findProposalByTitle(proposalTitle);
-        ZonedDateTime date = ZonedDateTime.parse(dateString);
+    @Then("The invite to {string} for {string} will not be created")
+    public void theInviteToForWillNotBeCreated(String whoUsername, String whatTitle) {
         User who = userRepository.findUserById(whoUsername);
+        Proposal what = proposalRepository.findProposalByTitle(whatTitle);
+        Invite invite = inviteRepository.findByWhoAndWhat(who, what);
 
-        Invite invite = new Invite();
-        invite.setWho(who);
-        invite.setWhat(proposal);
-        invite.setStatus(status);
-        invite.setInviteDate(date);
-        inviteRepository.save(invite);
-
-        stepDefs.result = stepDefs.mockMvc.perform(
-                        post("/invites")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(stepDefs.mapper.writeValueAsString(invite))
-                                .accept(MediaType.APPLICATION_JSON).
-                                with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-    }
-
-    private boolean isStudent(String username) {
-        return studentRepository.existsById(username);
-    }
-
-    private boolean isProfessor(String username) {
-        return professorRepository.existsById(username);
-    }
-
-    private boolean isExternal(String username) {
-        return externalRepository.existsById(username);
-    }
-
-    @Then("The invite will not be created")
-    public void the_proposal_should_not_be_created() {
-        //Invite invite = new Invite();
-        //Assertions.assertNull(invite.getId());
-
-        Assertions.assertEquals(0, inviteRepository.count()); //ho canviem perquè comprovi que no s'ha afegit res
-
+        Assertions.assertNull(invite);
     }
 }
