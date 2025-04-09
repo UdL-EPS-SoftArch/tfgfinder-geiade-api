@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.tfgfinder.domain;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -45,10 +46,14 @@ public class Proposal extends UriEntity<Long> {
     @ElementCollection
     private Collection<String> keywords;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     private User user; // Reference to the User entity
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne //Changed to many to one.
     @NotNull
     private Category category;
+
+    //Create a handler to assign the proposal to the current user RoomEventHandler.java
 }
