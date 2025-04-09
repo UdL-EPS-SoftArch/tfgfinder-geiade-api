@@ -1,13 +1,18 @@
 Feature: Category Management
 
   Scenario: Create and retrieve a category
-    Given a category with name "Technology" and description "All about technology and the latest AI innovations"
-    When I save the category
-    And I retrieve the category by name
-    Then the category should exist with name "Technology" and description "All about technology and the latest AI innovations"
+    Given There is a registered user with username "user" and password "existing"
+    And I login as "user" with password "existing"
+    When the user creates a category with name "Technology"
+    And description "All about technology and the latest AI innovations"
+    Then the category should be created successfully
 
 
   Scenario: Error creating category less than 50 char
-    Given a category with name "Technology" and description "All about technology"
-    Then the system should throw a constraint error
-    And the proposal should not be created
+    Given There is a registered user with username "user" and password "existing"
+    And I login as "user" with password "existing"
+    When the user creates a category with name "Technology"
+    And description "All about technology"
+    Then the category should not be created
+    And The error message is "size must be between 50 and 500"
+
