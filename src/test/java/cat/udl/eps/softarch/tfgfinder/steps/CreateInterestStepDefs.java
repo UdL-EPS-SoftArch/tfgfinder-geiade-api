@@ -149,13 +149,6 @@ public class CreateInterestStepDefs {
         }
     }
 
-    // Creates an Interest using a given username and proposal ID.
-    @When("I create an interest with user \"([^\"]*)\" and proposal id \"([^\"]*)\"")
-    public void ICreateAnInterestWithUserAndProposalId(String username, long proposalId)
-    {
-
-    }
-
     // Sends a POST request to the API to express interest in a proposal 
     // by the currently authenticated user.
     @Then("^I show interest to proposal id \"([^\"]*)\"$")
