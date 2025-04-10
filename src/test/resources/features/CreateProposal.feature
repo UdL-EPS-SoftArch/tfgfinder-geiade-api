@@ -5,7 +5,7 @@ Feature: Create a Proposal
     And I login as "user" with password "password"
     And a category "Software Engineering" with description "Software Engineering involves the design, development, and maintenance of software systems through systematic and structured approaches, focusing on quality, efficiency, and scalability." exists
     When the user creates a proposal with title "AI for Robotics"
-    And description "Study of Artificial Intelligence (AI) applied to robotics involves developing intelligent systems that enable robots to perform tasks autonomously, improve decision-making, and enhance interaction with their environment, combining machine learning, computer vision, and advanced algorithms."
+    And proposal description "Study of Artificial Intelligence (AI) applied to robotics involves developing intelligent systems that enable robots to perform tasks autonomously, improve decision-making, and enhance interaction with their environment, combining machine learning, computer vision, and advanced algorithms."
     And timing "6 months"
     And speciality "AI & Robotics"
     And kind "Research"
@@ -19,7 +19,7 @@ Feature: Create a Proposal
     And I login as "user" with password "password"
     And a category "Software Engineering" with description "Software Engineering involves the design, development, and maintenance of software systems through systematic and structured approaches, focusing on quality, efficiency, and scalability." exists
     When the user creates a proposal with title "AI for Robotics"
-    And description "AI research"
+    And proposal description "AI research"
     And timing "6 months"
     And speciality "AI & Robotics"
     And kind "Research"
@@ -31,7 +31,7 @@ Feature: Create a Proposal
     Given I'm not logged in
     And a category "Software Engineering" with description "Software Engineering involves the design, development, and maintenance of software systems through systematic and structured approaches, focusing on quality, efficiency, and scalability." exists
     When the user creates a proposal with title "AI for Robotics"
-    And description "Study of Artificial Intelligence (AI) applied to robotics involves developing intelligent systems that enable robots to perform tasks autonomously, improve decision-making, and enhance interaction with their environment, combining machine learning, computer vision, and advanced algorithms."
+    And proposal description "Study of Artificial Intelligence (AI) applied to robotics involves developing intelligent systems that enable robots to perform tasks autonomously, improve decision-making, and enhance interaction with their environment, combining machine learning, computer vision, and advanced algorithms."
     And timing "6 months"
     And speciality "AI & Robotics"
     And kind "Research"

@@ -53,7 +53,7 @@ public class CreateProposalStepDefs {
         proposal.setTitle(title);
     }
 
-    @And("description {string}")
+    @And("proposal description {string}")
     public void description(String description) {
         proposal.setDescription(description);
     }
