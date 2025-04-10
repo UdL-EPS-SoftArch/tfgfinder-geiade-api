@@ -44,7 +44,7 @@ public class CreateCategoryStepDefs {
         category.setName(categoryName);
     }
 
-    @And("description {string}")
+    @And("category description {string}")
     public void description(String description) {
         category.setDescription(description);
     }
