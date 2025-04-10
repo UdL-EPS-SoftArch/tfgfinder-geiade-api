@@ -3,7 +3,8 @@ package cat.udl.eps.softarch.tfgfinder.steps;
 import cat.udl.eps.softarch.tfgfinder.domain.*;
 import cat.udl.eps.softarch.tfgfinder.repository.*;
 
-import io.cucumber.java.en.And;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.java.en.When;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Before;
@@ -44,24 +45,6 @@ public class InviteUserStepDefs {
 
     @Autowired
     private InviteRepository inviteRepository;
-
-    /*
-    @AfterEach
-    void tearDown() {
-        inviteRepository.deleteAll(); //per borrar els que si es creen a cada test
-    }
-     */
-
-    @Before
-    public void emptyRepos() {
-        inviteRepository.deleteAll();
-        studentRepository.deleteAll();
-        professorRepository.deleteAll();
-        externalRepository.deleteAll();
-        proposalRepository.deleteAll();
-        userRepository.deleteAll();
-    }
-
 
     @Given("{string} is a Student with name {string}, surname {string}, DNI {string}, address {string}, municipality {string}, postalCode {string}, phoneNumber {string} and degree {string} and email {string} and password {string}")
     public void isAStudentWithNameSurnameDNIAddressMunicipalityPostalCodePhoneNumberAndDegree(String username, String name, String surname, String dni, String address, String municipality, String postalCode, String phoneNumber, String degree, String email, String password) {
@@ -132,9 +115,9 @@ public class InviteUserStepDefs {
         }
     }
 
-    @Then("{string} creates an invite to user {string} for proposal {string} with status {string} and date {string}")
-    public void createsAnInviteToUserForProposalWithStatusAndDate(String ownUsername, String whoUsername, String proposalTitle, String status, String dateString) throws Exception {
-        Proposal proposal = proposalRepository.findProposalByTitle(proposalTitle);
+    @When("{string} creates an invite to user {string} for proposal {string} with status {string} and date {string}")
+    public void createsAnInviteToUserForProposalWithStatusAndDate(String ownUsername, String whoUsername, String whatTitle, String status, String dateString) throws Exception {
+        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
         ZonedDateTime date = ZonedDateTime.parse(dateString);
         User who = userRepository.findUserById(whoUsername);
 
@@ -143,7 +126,6 @@ public class InviteUserStepDefs {
         invite.setWhat(proposal);
         invite.setStatus(status);
         invite.setInviteDate(date);
-        inviteRepository.save(invite);
 
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/invites")
@@ -180,5 +162,97 @@ public class InviteUserStepDefs {
         Invite invite = inviteRepository.findByWhoAndWhat(who, what);
 
         Assertions.assertNull(invite);
+    }
+
+    @When("{string} creates an invite for proposal {string} with status {string} and date {string}")
+    public void createsAnInviteForProposalWithStatusAndDate(String ownUsername, String whatTitle, String status, String dateString) throws Exception {
+        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
+        ZonedDateTime date = ZonedDateTime.parse(dateString);
+
+        Invite invite = new Invite();
+        invite.setWhat(proposal);
+        invite.setStatus(status);
+        invite.setInviteDate(date);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/invites")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(invite))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("{string}creates an invite to user {string} with status {string} and date {string}")
+    public void createsAnInviteToUserWithStatusAndDate(String ownUsername, String whoUsername, String status, String dateString) throws Exception {
+        ZonedDateTime date = ZonedDateTime.parse(dateString);
+        User who = userRepository.findUserById(whoUsername);
+
+        Invite invite = new Invite();
+        invite.setWho(who);
+        invite.setStatus(status);
+        invite.setInviteDate(date);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/invites")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(invite))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("{string} creates an invite to user {string} for proposal {string} with date {string}")
+    public void createsAnInviteToUserForProposalWithDate(String ownUsername, String whoUsername, String whatTitle, String dateString) throws Exception {
+        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
+        ZonedDateTime date = ZonedDateTime.parse(dateString);
+        User who = userRepository.findUserById(whoUsername);
+
+        Invite invite = new Invite();
+        invite.setWho(who);
+        invite.setWhat(proposal);
+        invite.setInviteDate(date);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/invites")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(invite))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
+    }
+
+    @When("{string} creates an invite to user {string} for proposal {string} with status {string}")
+    public void createsAnInviteToUserForProposalWithStatus(String ownUsername, String whoUsername, String whatTitle, String status) throws Exception {
+        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
+        User who = userRepository.findUserById(whoUsername);
+
+        Invite invite = new Invite();
+        invite.setWho(who);
+        invite.setWhat(proposal);
+        invite.setStatus(status);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/invites")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(invite))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
+    }
+
+    @When("{string} creates an invite without specifying who, what, status or date")
+    public void createsAnInviteWithoutSpecifyingWhoWhatStatusOrDate(String ownUsername) throws Exception {
+        Invite invite = new Invite();
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/invites")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(invite))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 }
