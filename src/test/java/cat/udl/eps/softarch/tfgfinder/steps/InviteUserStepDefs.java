@@ -102,8 +102,8 @@ public class InviteUserStepDefs {
         }
     }
 
-    @Given("There is a proposal titled {string} with description {string} and timing {string} and specialty {string} and kind {string}")
-    public void thereIsAProposalTitledWithDescriptionAndTimingAndSpecialtyAndKind(String title, String description, String timing, String specialty, String kind) {
+    @Given("There is a proposal by {string} titled {string} with description {string} and timing {string} and specialty {string} and kind {string}")
+    public void thereIsAProposalTitledWithDescriptionAndTimingAndSpecialtyAndKind(String username, String title, String description, String timing, String specialty, String kind) {
         if (proposalRepository.findProposalByTitle(title) == null) {
             Proposal proposal = new Proposal();
             proposal.setTitle(title);
@@ -111,6 +111,7 @@ public class InviteUserStepDefs {
             proposal.setTiming(timing);
             proposal.setSpeciality(specialty);
             proposal.setKind(kind);
+            proposal.setUser(userRepository.findUserById(username));
             proposalRepository.save(proposal);
         }
     }

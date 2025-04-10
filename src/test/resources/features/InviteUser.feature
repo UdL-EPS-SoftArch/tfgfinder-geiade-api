@@ -14,7 +14,7 @@ Feature: Invite creation
     Given "external1" is an External with name "Ringo", surname "Giné", position "Consultant", organization "Tech Corp", address "789 Corporate Blvd", municipality "Tech City", postalCode "54321", phoneNumber "600123789" and email "e1@gmail.com" and password "password"
     Given "external2" is an External with name "Francesc", surname "Tena", position "Senior Engineer", organization "Innovative Solutions", address "101 Innovation Rd", municipality "Innovate City", postalCode "98765", phoneNumber "600987321" and email "e2@gmail.com" and password "password"
 
-    Given There is a proposal titled "TREBALL FINAL DE GRAU" with description "Detailed description of the project for a final degree proposal" and timing "timing" and specialty "specialty" and kind "kindd"
+    Given There is a proposal by "student1" titled "TREBALL FINAL DE GRAU" with description "Detailed description of the project for a final degree proposal" and timing "timing" and specialty "specialty" and kind "kindd"
 
 # Valid Invites
 
