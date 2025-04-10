@@ -2,8 +2,10 @@ package cat.udl.eps.softarch.tfgfinder.domain;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,21 +46,15 @@ public class Proposal extends UriEntity<Long> {
     @ElementCollection
     private Collection<String> keywords;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
+    @NotNull
     private User user; // Reference to the User entity
 
-    @ManyToOne
-    private Student student;
-
-    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    @ManyToOne //Changed to many to one.
+    @NotNull
     private Category category;
 
-    // Mandatory once accepted: at least one professor
-    @ManyToOne
-    private Professor professor;
-
-    // Optional Co-Director (Director/External/Professor)
-    @ManyToOne
-    private Director coDirector;
-
+    //Create a handler to assign the proposal to the current user RoomEventHandler.java
 }
