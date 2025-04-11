@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.MediaType;
 
@@ -54,7 +55,7 @@ public class CreateInterestStepDefs {
     @Given("^There is a proposal created$")
     public void createdProposal(){
         Proposal proposal = new Proposal();
-        proposal.setTitle("Gestión Propuestas");
+        proposal.setTitle("proposalTitle");
         proposal.setDescription("Desarrollo de una aplicación web para gestionar propuestas académicas usando Spring Boot y Angular.");
         proposal.setTiming("aaaaa");
         proposal.setSpeciality("aaaaa");
@@ -65,7 +66,7 @@ public class CreateInterestStepDefs {
     @When("There already is an interest with the following details:$")
     public void There_already_is_an_interest_with_the_following_details(Map<String, String> interestDetails) {
         Interest interest = new Interest();
-        Proposal proposal = proposalRepository.findById(Long.parseLong(interestDetails.get("proposalId"))).orElse(null);
+        Proposal proposal = proposalRepository.findByTitle(interestDetails.get("proposalTitle")).orElse(null);
         interest.setProposal(proposal);
             if(interestDetails.get("date") != null){
             ZonedDateTime date = ZonedDateTime.parse(interestDetails.get("date"));
@@ -90,7 +91,7 @@ public class CreateInterestStepDefs {
 
     @When("I try to create an interest with the following details:$")
     public void I_try_to_create_an_interest_with_the_following_details(Map<String, String> interestDetails) throws Exception {
-        Proposal proposal = proposalRepository.findById(Long.parseLong(interestDetails.get("proposalId"))).orElse(null);
+        Proposal proposal = proposalRepository.findByTitle(interestDetails.get("proposalTitle")).orElse(null);
         if (proposal != null) {
             List<Interest> existingInterests = interestRepository.findByProposal(proposal);
             if(existingInterests.size()>0){
@@ -141,8 +142,8 @@ public class CreateInterestStepDefs {
                     status = Status.REJECTED;
                 }
             assertEquals(interest.getStatus(), status);
-            Long proposalId = Long.parseLong(interestDetails.get("proposalId"));
-            Assert.assertEquals(interest.getProposal().getId(), proposalId);
+            String title = interestDetails.get("proposalTitle");
+            Assert.assertEquals(interest.getProposal().getTitle(), title);
             assertEquals(interest.getUser().getUsername(), interestDetails.get("username"));
         }
     }
