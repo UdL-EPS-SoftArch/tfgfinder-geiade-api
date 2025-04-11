@@ -55,7 +55,7 @@ public class AgreeStepDefs {
     @When("There already is an agree with the following details:$")
     public void There_already_is_and_agre_with_the_following_details(Map<String, String> agreeDetails) throws Throwable {
         Agree agree = new Agree();
-        Proposal proposal = proposalRepository.findById(Long.parseLong(agreeDetails.get("proposalId"))).orElse(null);
+        Proposal proposal = proposalRepository.findProposalByTitle(agreeDetails.get("proposalTitle")).iterator().next();
         agree.setProposal(proposal);
             if(agreeDetails.get("date") != null){
             ZonedDateTime date = ZonedDateTime.parse(agreeDetails.get("date"));
@@ -83,7 +83,7 @@ public class AgreeStepDefs {
     @When("I agree to an agree with the following details:$")
     public void createAgree(Map<String, String> agreeDetails) throws Exception{
         
-        Proposal proposal = proposalRepository.findById(Long.parseLong(agreeDetails.get("proposalId"))).orElse(null);
+        Proposal proposal = proposalRepository.findProposalByTitle(agreeDetails.get("proposalTitle")).iterator().next();
         if (proposal != null) {
             List<Agree> existingAgrees = agreeRepository.findAgreeByProposal(proposal);
             if(existingAgrees.size()>0){
@@ -134,8 +134,8 @@ public class AgreeStepDefs {
         if(agreeCreatedNum == 1){
             Agree agree = agreeRepository.findAll().iterator().next();
             assertEquals(agree.getStatus(), Status.ACCEPTED);
-            Long proposalId = Long.parseLong(agreeDetails.get("proposalId"));
-            Assert.assertEquals(agree.getProposal().getId(), proposalId);
+            String proposalTitle = agreeDetails.get("proposalTitle");
+            Assert.assertEquals(agree.getProposal().getTitle(), proposalTitle);
             assertEquals(agree.getUser().getUsername(), agreeDetails.get("username"));
         }
         
