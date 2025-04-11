@@ -22,7 +22,6 @@ public class Proposal extends UriEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @NotBlank
     @Size(min = 12, max = 120)
     private String title;
@@ -53,7 +52,6 @@ public class Proposal extends UriEntity<Long> {
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne //Changed to many to one.
-    @NotNull
     private Category category;
 
     //Create a handler to assign the proposal to the current user RoomEventHandler.java

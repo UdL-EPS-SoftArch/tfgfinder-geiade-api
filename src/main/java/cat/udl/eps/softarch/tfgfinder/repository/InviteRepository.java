@@ -15,4 +15,5 @@ public interface InviteRepository extends CrudRepository<Invite, Long>, PagingAn
     List<Invite> findByStatus(@Param("status") String status);
     List<Invite> findByWho(@Param("who") User who);
     List<Invite> findByWhat(@Param("what") Proposal what);
+    Invite findByWhoAndWhat(@Param("who") User who, @Param("what") Proposal what);
 }
