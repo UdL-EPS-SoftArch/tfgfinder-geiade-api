@@ -16,18 +16,21 @@ Scenario: Try to create and show an already created interest
     Given I can login with username "user" and password "password"
     And There is a proposal created
     When There already is an interest with the following details:
+      | interestTitle   | interestTitle |
       | proposalTitle   | proposalTitle |
       | username        | user  |
       | status          |pending|
       | date            | 2024-03-17T08:00:00+01:00 |
     And I try to create an interest with the following details:
+      | interestTitle   | interestTitle |
       | proposalTitle   | proposalTitle |
       | username        | user  |
       | status          |pending|
       | date            | 2024-03-17T08:00:00+01:00 |
-    Then The response code is 201
+    Then The response code is 200
     And There is only 1 interest with the details:
-      | proposalITitle  | proposalTitle |
+      | interestTitle   | interestTitle |
+      | proposalTitle  | proposalTitle |
       | username        | user  |
       | status          |pending|
       | date            | 2024-03-17T08:00:00+01:00 |
@@ -36,12 +39,14 @@ Scenario: Try to create and show a new interest
     Given I can login with username "user" and password "password"
     And There is a proposal created
     When I try to create an interest with the following details:
+      | interestTitle   | interestTitle |
       | proposalTitle   | proposalTitle |
       | username        | user  |
       | status          |pending|
       | date            | 2024-03-17T08:00:00+01:00 |
-    Then The response code is 200
+    Then The response code is 201
     And There is only 1 interest with the details:
+      | interestTitle   | interestTitle |
       | proposalTitle   | proposalTitle |
       | username        | user  |
       | status          |pending|

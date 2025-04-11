@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.nio.charset.StandardCharsets;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,10 +21,15 @@ public class RejectInterest {
     @Autowired
     private StepDefs stepDefs;
 
-    @And("^I try to reject an interest with id \"([^\"]*)\"$")
-    public void rejectInterest(String interestId) throws Exception{
+    @And("^I try to reject an interest with title \"([^\"]*)\"$")
+    public void rejectInterest(String interestTitle) throws Exception{
         
-        Interest interest = interestRepository.findById(Long.parseLong(interestId)).orElse(null);
+        Interest interest;
+        try {
+            interest = interestRepository.findByTitle(interestTitle).iterator().next();
+        } catch (NoSuchElementException e) {
+            interest = null;
+        }
         if (interest == null) {
             stepDefs.result = stepDefs.mockMvc.perform(
                         patch("/interests/{id}", (interest != null) ? interest.getId() : "999")

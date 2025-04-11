@@ -66,6 +66,7 @@ public class CreateInterestStepDefs {
     @When("There already is an interest with the following details:$")
     public void There_already_is_an_interest_with_the_following_details(Map<String, String> interestDetails) {
         Interest interest = new Interest();
+        interest.setTitle(interestDetails.get("interestTitle"));
         Proposal proposal = proposalRepository.findByTitle(interestDetails.get("proposalTitle")).orElse(null);
         interest.setProposal(proposal);
             if(interestDetails.get("date") != null){
@@ -99,6 +100,7 @@ public class CreateInterestStepDefs {
                 assertThat(existingInterest).isNotNull();
             }else{
                 Interest interest = new Interest();
+                interest.setTitle(interestDetails.get("interestTitle"));
                 String statusString = interestDetails.get("status");
                 Status status = null;
                 if(statusString.equals("accepted")){
@@ -141,6 +143,7 @@ public class CreateInterestStepDefs {
                 }else if(statusString.equals("rejected")){
                     status = Status.REJECTED;
                 }
+            assertEquals(interestDetails.get("interestTitle"), interest.getTitle());
             assertEquals(interest.getStatus(), status);
             String title = interestDetails.get("proposalTitle");
             Assert.assertEquals(interest.getProposal().getTitle(), title);

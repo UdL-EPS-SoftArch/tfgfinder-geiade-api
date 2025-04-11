@@ -36,6 +36,9 @@ public class Interest extends UriEntity<Long> {
 	@Enumerated (EnumType.STRING)
 	private Status status;
 
+	@NotNull
+	private String title;
+
 	// Relations
 
 	@ManyToOne

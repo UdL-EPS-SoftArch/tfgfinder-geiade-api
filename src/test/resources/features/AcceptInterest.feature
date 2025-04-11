@@ -17,14 +17,16 @@ Scenario: Try to accept an already created interest
     Given I can login with username "user" and password "password"
     And There is a proposal created
     When There already is an interest with the following details:
-      | proposalId  | 1     |
+      | interestTitle | interestTitle |
+      | proposalTitle  | proposalTitle     |
       | username    | user  |
       | status      |pending|
       | date        | 2024-03-17T08:00:00+01:00 |
-    And I try to accept an interest with id "1"
+    And I try to accept an interest with title "interestTitle"
     Then The response code is 200
     And There is only 1 interest with the details:
-      | proposalId  | 1     |
+      | interestTitle | interestTitle |
+      | proposalTitle  | proposalTitle     |
       | username    | user  |
       | status      |accepted|
       | date        | 2024-03-17T08:00:00+01:00 |
@@ -32,5 +34,5 @@ Scenario: Try to accept an already created interest
 Scenario: Try to accept a new interest
     Given I can login with username "user" and password "password"
     And There is a proposal created
-    When I try to accept an interest with id "1"
+    When I try to accept an interest with title "interestTitle"
     Then The response code is 404

@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.nio.charset.StandardCharsets;
+import java.util.NoSuchElementException;
 
 import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,15 @@ public class AcceptInterest {
     @Autowired
     private StepDefs stepDefs;
 
-    @And("^I try to accept an interest with id \"([^\"]*)\"$")
-    public void acceptInterest(String interestId) throws Exception{
+    @And("^I try to accept an interest with title \"([^\"]*)\"$")
+    public void acceptInterest(String interestTitle) throws Exception{
+        Interest interest;
+        try {
+            interest = interestRepository.findByTitle(interestTitle).iterator().next();
+        } catch (NoSuchElementException e) {
+            interest = null;
+        }
         
-        Interest interest = interestRepository.findById(Long.parseLong(interestId)).orElse(null);
         if (interest == null) {
             stepDefs.result = stepDefs.mockMvc.perform(
                         patch("/interests/{id}", (interest != null) ? interest.getId() : "999")
