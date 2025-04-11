@@ -3,14 +3,11 @@ package cat.udl.eps.softarch.tfgfinder.steps;
 import cat.udl.eps.softarch.tfgfinder.domain.*;
 import cat.udl.eps.softarch.tfgfinder.repository.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
+import io.cucumber.java.en.And;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
@@ -102,7 +99,7 @@ public class InviteUserStepDefs {
         }
     }
 
-    @Given("There is a proposal by {string} titled {string} with description {string} and timing {string} and specialty {string} and kind {string}")
+    @And("There is a proposal by {string} titled {string} with description {string} and timing {string} and specialty {string} and kind {string}")
     public void thereIsAProposalTitledWithDescriptionAndTimingAndSpecialtyAndKind(String username, String title, String description, String timing, String specialty, String kind) {
         if (proposalRepository.findProposalByTitle(title) == null) {
             Proposal proposal = new Proposal();
