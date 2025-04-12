@@ -14,10 +14,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProposalRepository extends CrudRepository<Proposal, Long>, PagingAndSortingRepository<Proposal, Long> {
-    List<Proposal> findProposalByCategory(@Param("category") Category category);
-    Proposal findProposalByTitle(@Param("title") String title);
+    List<Proposal> findByTitle(@Param("title") String title);
     List<Proposal> findByCategory(@Param("Category") Category category);
-    Optional<Proposal> findByTitle(String title);
 }
 
 

@@ -11,4 +11,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface StudentRepository extends CrudRepository<Student, String>, PagingAndSortingRepository<Student, String> {
   List<Student> findByNameContaining(@Param("name") String name);
+  
 }

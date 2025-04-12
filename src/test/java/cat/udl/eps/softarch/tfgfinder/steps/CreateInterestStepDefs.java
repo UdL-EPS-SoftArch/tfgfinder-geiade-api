@@ -39,7 +39,7 @@ import cat.udl.eps.softarch.tfgfinder.repository.UserRepository;
 
 public class CreateInterestStepDefs {
 
-    
+
     @Autowired
     private StepDefs stepDefs;
 
@@ -68,7 +68,8 @@ public class CreateInterestStepDefs {
     public void There_already_is_an_interest_with_the_following_details(Map<String, String> interestDetails) {
         Interest interest = new Interest();
         interest.setTitle(interestDetails.get("interestTitle"));
-        Proposal proposal = proposalRepository.findByTitle(interestDetails.get("proposalTitle")).orElse(null);
+        Proposal proposal = proposalRepository.findByTitle(interestDetails.get("proposalTitle"))
+                .stream().findFirst().orElse(null);
         interest.setProposal(proposal);
             if(interestDetails.get("date") != null){
             ZonedDateTime date = ZonedDateTime.parse(interestDetails.get("date"));
@@ -93,7 +94,8 @@ public class CreateInterestStepDefs {
 
     @When("I try to create an interest with the following details:$")
     public void I_try_to_create_an_interest_with_the_following_details(Map<String, String> interestDetails) throws Exception {
-        Proposal proposal = proposalRepository.findByTitle(interestDetails.get("proposalTitle")).orElse(null);
+        Proposal proposal = proposalRepository.findByTitle(interestDetails.get("proposalTitle"))
+                .stream().findFirst().orElse(null);
         if (proposal != null) {
             List<Interest> existingInterests = interestRepository.findByProposal(proposal);
             if(existingInterests.size()>0){

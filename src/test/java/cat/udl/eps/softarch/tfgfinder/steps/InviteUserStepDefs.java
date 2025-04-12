@@ -101,7 +101,7 @@ public class InviteUserStepDefs {
 
     @And("There is a proposal by {string} titled {string} with description {string} and timing {string} and specialty {string} and kind {string}")
     public void thereIsAProposalTitledWithDescriptionAndTimingAndSpecialtyAndKind(String username, String title, String description, String timing, String specialty, String kind) {
-        if (proposalRepository.findProposalByTitle(title) == null) {
+        if (proposalRepository.findByTitle(title).isEmpty()) {
             Proposal proposal = new Proposal();
             proposal.setTitle(title);
             proposal.setDescription(description);
@@ -115,7 +115,7 @@ public class InviteUserStepDefs {
 
     @When("{string} creates an invite to user {string} for proposal {string} with status {string} and date {string}")
     public void createsAnInviteToUserForProposalWithStatusAndDate(String ownUsername, String whoUsername, String whatTitle, String status, String dateString) throws Exception {
-        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
+        Proposal proposal = proposalRepository.findByTitle(whatTitle).stream().findFirst().orElse(null);
         ZonedDateTime date = ZonedDateTime.parse(dateString);
         User who = userRepository.findUserById(whoUsername);
 
@@ -137,7 +137,7 @@ public class InviteUserStepDefs {
     @Then("The invite to user {string} of proposal {string} is created with status {string}")
     public void theInviteToUserOfProposalShouldBeCreatedWithStatus(String whoUsername, String whatTitle, String status) throws Exception {
         User who = userRepository.findUserById(whoUsername);
-        Proposal what = proposalRepository.findProposalByTitle(whatTitle);
+        Proposal what = proposalRepository.findByTitle(whatTitle).stream().findFirst().orElse(null);
         Invite invite = inviteRepository.findByWhoAndWhat(who, what);
 
         assertEquals(status, invite.getStatus());
@@ -156,7 +156,7 @@ public class InviteUserStepDefs {
     @Then("The invite to {string} for {string} will not be created")
     public void theInviteToForWillNotBeCreated(String whoUsername, String whatTitle) {
         User who = userRepository.findUserById(whoUsername);
-        Proposal what = proposalRepository.findProposalByTitle(whatTitle);
+        Proposal what = proposalRepository.findByTitle(whatTitle).stream().findFirst().orElse(null);
         Invite invite = inviteRepository.findByWhoAndWhat(who, what);
 
         Assertions.assertNull(invite);
@@ -164,7 +164,7 @@ public class InviteUserStepDefs {
 
     @When("{string} creates an invite for proposal {string} with status {string} and date {string}")
     public void createsAnInviteForProposalWithStatusAndDate(String ownUsername, String whatTitle, String status, String dateString) throws Exception {
-        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
+        Proposal proposal = proposalRepository.findByTitle(whatTitle).stream().findFirst().orElse(null);
         ZonedDateTime date = ZonedDateTime.parse(dateString);
 
         Invite invite = new Invite();
@@ -202,7 +202,7 @@ public class InviteUserStepDefs {
 
     @When("{string} creates an invite to user {string} for proposal {string} with date {string}")
     public void createsAnInviteToUserForProposalWithDate(String ownUsername, String whoUsername, String whatTitle, String dateString) throws Exception {
-        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
+        Proposal proposal = proposalRepository.findByTitle(whatTitle).stream().findFirst().orElse(null);
         ZonedDateTime date = ZonedDateTime.parse(dateString);
         User who = userRepository.findUserById(whoUsername);
 
@@ -218,12 +218,11 @@ public class InviteUserStepDefs {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-
     }
 
     @When("{string} creates an invite to user {string} for proposal {string} with status {string}")
     public void createsAnInviteToUserForProposalWithStatus(String ownUsername, String whoUsername, String whatTitle, String status) throws Exception {
-        Proposal proposal = proposalRepository.findProposalByTitle(whatTitle);
+        Proposal proposal = proposalRepository.findByTitle(whatTitle).stream().findFirst().orElse(null);
         User who = userRepository.findUserById(whoUsername);
 
         Invite invite = new Invite();
@@ -238,13 +237,11 @@ public class InviteUserStepDefs {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-
     }
 
     @When("{string} creates an invite without specifying who, what, status or date")
     public void createsAnInviteWithoutSpecifyingWhoWhatStatusOrDate(String ownUsername) throws Exception {
         Invite invite = new Invite();
-
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/invites")
                                 .contentType(MediaType.APPLICATION_JSON)
