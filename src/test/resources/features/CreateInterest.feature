@@ -14,7 +14,7 @@ Background:
 
 Scenario: Try to create and show an already created interest
     Given I can login with username "user" and password "password"
-    And There is a proposal created
+    And There is a proposal created with username "user"
     When There already is an interest with the following details:
       | interestTitle   | interestTitle |
       | proposalTitle   | proposalTitle |
@@ -37,7 +37,7 @@ Scenario: Try to create and show an already created interest
 
 Scenario: Try to create and show a new interest
     Given I can login with username "user" and password "password"
-    And There is a proposal created
+    And There is a proposal created with username "user"
     When I try to create an interest with the following details:
       | interestTitle   | interestTitle |
       | proposalTitle   | proposalTitle |

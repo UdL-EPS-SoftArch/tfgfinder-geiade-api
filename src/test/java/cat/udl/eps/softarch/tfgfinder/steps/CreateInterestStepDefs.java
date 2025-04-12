@@ -52,14 +52,15 @@ public class CreateInterestStepDefs {
     @Autowired
     private UserRepository userRepository;
 
-    @Given("^There is a proposal created$")
-    public void createdProposal(){
+    @Given("^There is a proposal created with username \"([^\"]*)\"$")
+    public void createdProposal(String user){
         Proposal proposal = new Proposal();
         proposal.setTitle("proposalTitle");
         proposal.setDescription("Desarrollo de una aplicación web para gestionar propuestas académicas usando Spring Boot y Angular.");
         proposal.setTiming("aaaaa");
         proposal.setSpeciality("aaaaa");
         proposal.setKind("aaaaa");
+        proposal.setUser(userRepository.findUserById(user));
         proposalRepository.save(proposal);
     }
 

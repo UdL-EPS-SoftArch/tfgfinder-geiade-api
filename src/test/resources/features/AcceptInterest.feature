@@ -15,7 +15,7 @@ Background:
 
 Scenario: Try to accept an already created interest
     Given I can login with username "user" and password "password"
-    And There is a proposal created
+    And There is a proposal created with username "user"
     When There already is an interest with the following details:
       | interestTitle | interestTitle |
       | proposalTitle  | proposalTitle     |
@@ -33,6 +33,6 @@ Scenario: Try to accept an already created interest
 
 Scenario: Try to accept a new interest
     Given I can login with username "user" and password "password"
-    And There is a proposal created
+    And There is a proposal created with username "user"
     When I try to accept an interest with title "interestTitle"
     Then The response code is 404

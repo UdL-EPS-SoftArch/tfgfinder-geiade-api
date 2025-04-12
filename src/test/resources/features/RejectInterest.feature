@@ -15,7 +15,7 @@ Background:
 
 Scenario: Try to reject an already created interest
     Given I can login with username "user" and password "password"
-    And There is a proposal created
+    And There is a proposal created with username "user"
     When There already is an interest with the following details:
       | interestTitle | interestTitle |
       | proposalTitle  | proposalTitle     |
@@ -34,6 +34,6 @@ Scenario: Try to reject an already created interest
 
 Scenario: Try to reject a new interest
     Given I can login with username "user" and password "password"
-    And There is a proposal created
+    And There is a proposal created with username "user"
     When I try to reject an interest with title "interestTitle"
     Then The response code is 404
