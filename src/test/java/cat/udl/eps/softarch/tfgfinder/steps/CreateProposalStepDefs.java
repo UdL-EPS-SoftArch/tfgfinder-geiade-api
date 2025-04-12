@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
@@ -94,16 +95,13 @@ public class CreateProposalStepDefs {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-
-        Optional<Proposal> obtainedProposal = proposalRepository.findByTitle(proposal.getTitle());
-        assertTrue("Proposal with title " + proposal.getTitle() + "should exist", obtainedProposal.isPresent());
-
+        List<Proposal> proposals = proposalRepository.findByTitle(proposal.getTitle());
+        assertTrue("Proposal with title " + proposal.getTitle() + "should exist",
+                proposals.stream().anyMatch(p -> p.getTitle().equals(proposal.getTitle())));
     }
-
 
     @And("the proposal should not be created")
     public void theProposalShouldNotBeCreated() throws Exception {
-
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/proposals")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +110,8 @@ public class CreateProposalStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andExpect(status().isBadRequest());
 
-        Optional<Proposal> obtainedProposal = proposalRepository.findByTitle(proposal.getTitle());
-        assertFalse("Proposal with title " + proposal.getTitle() + "should exist", obtainedProposal.isPresent());
+        List<Proposal> proposals = proposalRepository.findByTitle(proposal.getTitle());
+        assertFalse("Proposal with title " + proposal.getTitle() + "shouldn't exist",
+                proposals.stream().anyMatch(p -> p.getTitle().equals(proposal.getTitle())));
     }
 }
