@@ -1,13 +1,11 @@
 package cat.udl.eps.softarch.tfgfinder.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +18,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "dtype")
+@JsonSubTypes({
+		@JsonSubTypes.Type(value = Student.class, name = "Student"),
+		@JsonSubTypes.Type(value = Professor.class, name = "Professor"),
+		@JsonSubTypes.Type(value = External.class, name = "Organisation")
+})
+
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "DemoUser") //Avoid collision with system table User
 @Data
 @EqualsAndHashCode(callSuper = true)
