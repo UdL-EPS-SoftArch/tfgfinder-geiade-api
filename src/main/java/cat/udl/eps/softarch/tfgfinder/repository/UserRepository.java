@@ -23,4 +23,5 @@ public interface UserRepository extends CrudRepository<User, String>, PagingAndS
 
   List<User> findByIdContaining(@Param("text") String text);
   User findUserById(@Param("id") String id);
+  boolean existsByEmail(String email);
 }

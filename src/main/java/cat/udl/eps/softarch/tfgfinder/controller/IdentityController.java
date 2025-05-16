@@ -7,11 +7,13 @@ import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @BasePathAwareController
 public class IdentityController {
 
-  @RequestMapping("/identity")
+  @RequestMapping("/api/identity")
   public @ResponseBody
   PersistentEntityResource getAuthenticatedUserIdentity(
       PersistentEntityResourceAssembler resourceAssembler) {

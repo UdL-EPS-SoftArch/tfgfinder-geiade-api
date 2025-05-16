@@ -50,7 +50,7 @@ public class InviteUserStepDefs {
             student.setName(name);
             student.setUsername(username);
             student.setSurname(surname);
-            student.setDNI(dni);
+            student.setDni(dni);
             student.setAddress(address);
             student.setMunicipality(municipality);
             student.setPostalCode(postalCode);
