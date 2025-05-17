@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -109,6 +108,21 @@ public class CreateProposalStepDefs {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andExpect(status().isBadRequest());
+
+        List<Proposal> proposals = proposalRepository.findByTitle(proposal.getTitle());
+        assertFalse("Proposal with title " + proposal.getTitle() + "shouldn't exist",
+                proposals.stream().anyMatch(p -> p.getTitle().equals(proposal.getTitle())));
+    }
+
+    @And("an unauthorized error should be thrown")
+    public void anUnauthorizedErrorShouldBeThrown() throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/proposals")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(proposal))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isUnauthorized());
 
         List<Proposal> proposals = proposalRepository.findByTitle(proposal.getTitle());
         assertFalse("Proposal with title " + proposal.getTitle() + "shouldn't exist",
