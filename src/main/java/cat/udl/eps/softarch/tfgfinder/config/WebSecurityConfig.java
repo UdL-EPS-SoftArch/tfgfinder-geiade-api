@@ -34,6 +34,7 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/*/*").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/*/*").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/*/*").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                 .anyRequest().permitAll())
             .csrf((csrf) -> csrf.disable())
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
