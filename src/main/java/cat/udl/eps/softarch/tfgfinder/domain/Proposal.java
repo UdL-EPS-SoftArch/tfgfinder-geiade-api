@@ -42,7 +42,7 @@ public class Proposal extends UriEntity<Long> {
     @Size(min = 5, max = 50)
     private String kind;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection<String> keywords;
 
     @JsonIdentityReference(alwaysAsId = true)

@@ -37,5 +37,5 @@ Feature: Create a Proposal
     And kind "Research"
     And category with name "Software Engineering"
     And keywords "AI, Robotics"
-    Then the proposal should not be created
+    Then an unauthorized error should be thrown
     And The error message is "must not be null"
