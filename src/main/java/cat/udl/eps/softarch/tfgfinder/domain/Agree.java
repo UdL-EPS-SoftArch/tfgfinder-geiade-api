@@ -36,7 +36,7 @@ public class Agree extends UriEntity<Long> {
     private Status status;
 
     @ManyToOne
-    @NotNull
+    /*@NotNull*/
     @JsonIdentityReference(alwaysAsId = true)
     private Proposal proposal;
 
